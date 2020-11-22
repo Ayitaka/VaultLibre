@@ -2,7 +2,7 @@ FROM mcr.microsoft.com/dotnet/core/sdk:3.1 as build
 
 WORKDIR /licenseGen
 
-COPY ./src/licenseGen /licenseGen
+COPY . /licenseGen
 
 RUN set -e; set -x; \
 	dotnet add package Newtonsoft.Json --version 12.0.3 \
@@ -10,7 +10,7 @@ RUN set -e; set -x; \
 	&& dotnet publish
 
 
-FROM ayitaka/bitbetter-api:latest
+FROM bitbetter/api
 
 COPY --from=build /licenseGen/bin/Debug/netcoreapp3.1/publish/* /app/
 

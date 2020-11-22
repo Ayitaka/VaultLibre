@@ -1,3 +1,5 @@
+<a href="https://github.com/ayitaka/BitBetter/actions"><img alt="GitHub Actions Build" src="https://github.com/ayitaka/BitBetter/workflows/BitBetter%20Image/badge.svg"></a>
+<a href="https://hub.docker.com/r/ayitaka/bitbetter-api"><img alt="Docker Pulls" src="https://img.shields.io/docker/pulls/ayitaka/bitbetter-api.svg"></a>
 # BitBetter
 
 BitBetter is is a tool to modify Bitwarden's core dll to allow you to generate your own individual and organisation licenses. **You must have an existing installation of Bitwarden for BitBetter to modify.**
@@ -11,41 +13,146 @@ Credit to https://github.com/h44z/BitBetter and https://github.com/jakeswenson/B
 # Table of Contents
 1. [Getting Started](#getting-started)
     + [Dependencies](#dependencies)
-    + [Setting up BitBetter](#setting-up-bitbetter)
-    + [Building BitBetter](#building-bitbetter)
-    + [Updating Bitwarden and BitBetter](#updating-bitwarden-and-bitbetter)
+    + [Installing BitBetter](#installing-bitbetter)
+    + [Updating BitBetter and Bitwarden](#updating-bitbetter-and-bitwarden)
     + [Generating Signed Licenses](#generating-signed-licenses)
-2. [FAQ](#faq-questions-you-might-have-)
-3. [Footnotes](#footnotes)
+2. [Script Options](#script-options)
+3. [Advanced](#advanced)
+    + [Building BitBetter](#building-bitbetter)
+    + [Updating Built BitBetter and Bitwarden](#updating-built--bitbetter-and-bitwarden)
+    + [Manually Generating Certificate](#manually-generating-certificate)
+    + [Manually Generating Signed Licenses](#manually-generating-signed-licenses)
+4. [FAQ](#faq-questions-you-might-have-)
+5. [Footnotes](#footnotes)
 
 # Getting Started
-The following instructions are for unix-based systems (Linux, BSD, macOS), it is possible to use a Windows systems assuming you are able to enable and install [WSL](https://docs.microsoft.com/en-us/windows/wsl/install-win10).
+The following instructions are for unix-based systems (Linux, BSD, macOS). It is possible to use a Windows based system, assuming you are able to enable and install [WSL](https://docs.microsoft.com/en-us/windows/wsl/install-win10).
 
 ## Dependencies
-Aside from docker, which you also need for Bitwarden, BitBetter requires the following:
-
-* Bitwarden (tested with 1.37.0, might work on lower versions)
+* docker
+* docker-compose
+* curl
 * openssl (probably already installed on most Linux or WSL systems, any version should work)
+* Bitwarden (tested with 1.37.2, might work on lower versions)
 
-## Setting up BitBetter
-With your dependencies installed, begin the installation of BitBetter by downloading it through Github or using the git command:
+## Installing BitBetter
+The easiest way to install BitBetter is to use the bitbetter script which utilizes the public BitBetter docker images. These docker images are compiled automatically anytime a new version of Bitwarden is released or when changes are made to BitBetter.
+
+#### Run the install script:
 
 ```bash
-git clone https://github.com/jakeswenson/BitBetter.git
+curl --retry 3 "https://raw.githubusercontent.com/Ayitaka/BitBetter/master/bitbetter.sh" -o "./bitbetter.sh" && chmod 0755 ./bitbetter.sh && ./bitbetter.sh install
 ```
 
+For available options, see [Script Options](#script-options)
+
+## Updating BitBetter and Bitwarden
+
+#### Using the bitbetter script, you can update both BitBetter and Bitwarden:
+```bash
+./bitbetter.sh update auto
+```
+
+## Generating Signed Licenses
+Licenses are used for enabling certain features. There are licenses for Users and for Organizations. When you install BitBetter, a script called generate_license.sh is placed in the installation directory to make generating licenses easy.
+
+#### For a user:
+```bash
+./generate_license.sh user USERS_NAME EMAIL USERS_GUID
+```
+
+Example: generate_license.sh user SomeUser someuser@example.com 12345678-1234-1234-1234-123456789012
+
+---
+
+#### For an Organization:
+```bash
+./generate_license.sh org ORGS_NAME EMAIL BUSINESS_NAME
+```
+
+Example: generate_license.sh org "My Organization Display Name" admin@mybusinesscompany.com "My Company Inc."
+
+---
+
+#### Interactive Mode (will prompt you for required input):
+```bash
+./generate_license.sh
+```
+
+# Script Options
+
+### Syntax
+```bash
+./bitbetter.sh help
+```
+Install using images from Docker Hub
+```bash
+./bitbetter.sh install [auto] [regencerts] [recreate]
+```
+
+Install/build from Github src
+```bash
+./bitbetter.sh install build  [auto] [regencerts] [recreate]
+```
+
+Update using images from Docker Hub
+```bash
+./bitbetter.sh update [auto] [regencerts] [recreate] [restart]
+```
+
+Update from Github src
+```bash
+./bitbetter.sh update build [auto] [regencerts] [recreate] [restart]
+```
+
+Update/force rebuild from Github src
+```bash
+./bitbetter.sh update rebuild [auto] [regencerts] [recreate] [restart]
+```
+
+### Options
+```yaml
+AUTO                  Skip prompts, update this script, create certs only if they do not exist,
+                      and recreate docker-compose.override.yml
+REGENCERTS            Force regeneratioin of certificates
+RECREATE              Force recreation of docker-compose.override.yml
+RESTART               Force restart of Bitwarden if Bitwarden's update does not do a restart
+LOCALTIME             Force Bitwarden to write logs using localtime instead of UTC 
+                      (Use LOCALTIME with RECREATE, or it has no effect)
+```
+
+# Advanced
+
 ## Building BitBetter
+Alternatively, you can build the docker images yourself using the BitBetter source code on Github.
+
+#### Using the bitbetter script:
+```bash
+curl --retry 3 "https://raw.githubusercontent.com/Ayitaka/BitBetter/master/bitbetter.sh" -o "./bitbetter.sh" && chmod 0755 ./bitbetter.sh && ./bitbetter.sh install build
+```
+
+---
+
+#### Manually:
+Clone the BitBetter repository to your current directory:
+```bash
+git clone https://github.com/Ayitaka/BitBetter.git
+```
 
 Now that you've set up your build environment, you can **run the main build script** to generate a modified version of the `bitwarden/api` and `bitwarden/identity` docker images.
 
-From the BitBetter directory, simply run:
+Change to the BitBetter directory, replace the Dockerfile with the one for manually building, and run build.sh:
 ```bash
+cd BitBetter
+mv -f .build/Dockerfile.bitBetter ./Dockerfile
 ./build.sh
 ```
 
-This will create a new self-signed certificate in the `.keys` directory if one does not already exist and then create a modified version of the official `bitwarden/api` called `bitbetter/api` and a modified version of the `bitwarden/identity` called `bitbetter/identity`.
+This will create a new self-signed certificate in the `.keys` directory, if one does not already exist, and then create a modified versions of the official Bitwarden images:
+`bitwarden/api` -> `bitbetter/api`
+`bitwarden/identity` -> `bitbetter/identity`
 
-You may now simply create the file `/path/to/bwdata/docker/docker-compose.override.yml` with the following contents to utilize the modified images.
+Now create the file `/path/to/bwdata/docker/docker-compose.override.yml` with the following contents to utilize the modified BitBetter images:
 
 ```yaml
 version: '3'
@@ -58,39 +165,54 @@ services:
     image: bitbetter/identity
 ```
 
-You'll also want to edit the `/path/to/bwdata/scripts/run.sh` file. In the `function restart()` block, comment out the call to `dockerComposePull`.
+In order to ignore errors when trying to pull the modified images (which do not exist on Docker Hub), you'll also want to edit the `/path/to/bwdata/scripts/run.sh` file. In the `function restart()` block, comment out the call to `dockerComposePull`.
 
 > Replace `dockerComposePull`<br>with `#dockerComposePull`
 
 You can now start or restart Bitwarden as normal and the modified api will be used. **It is now ready to accept self-issued licenses.**
 
----
-### Note: Manually generating Certificate & Key
+## Updating Built BitBetter and Bitwarden
 
-If you wish to generate your self-signed cert & key manually, you can run the following commands.
+#### Using the bitbetter script:
+```bash
+./bitbetter.sh update build
+```
+
+---
+
+#### Manually:
+To update Bitwarden, you can use the provided script. It will rebuild the BitBetter images and automatically update Bitwarden afterwards. Docker pull errors can be ignored for api and identity images.
+
+```bash
+cd BitBetter
+cp -f .build/update-bitwarden.sh ./update-bitwarden.sh
+```
+
+## Manually Generating Certificate
+
+If you wish to generate your self-signed certificate and key manually, you can run the following commands.
 
 ```bash
 openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.cert -days 36500 -outform DER -passout pass:test
 openssl x509 -inform DER -in cert.cert -out cert.pem
 openssl pkcs12 -export -out cert.pfx -inkey key.pem -in cert.pem -passin pass:test -passout pass:test
 ```
-
 > Note that the password here must be `test`.<sup>[1](#f1)</sup>
 
+Then just move the files **cert.cert cert.pem cert.pfx key.pem** to /path/to/BitBetter/.keys
+
 ---
+## Manually Generating Signed Licenses
 
-## Updating Bitwarden and BitBetter
-
-To update Bitwarden, the provided `update-bitwarden.sh` script can be used. It will rebuild the BitBetter images and automatically update Bitwarden afterwards. Docker pull errors can be ignored for api and identity images.
-
-## Generating Signed Licenses
+Manually generating licenses:
 
 There is a tool included in the directory `src/licenseGen/` that will generate new individual and organization licenses. These licenses will be accepted by the modified Bitwarden because they will be signed by the certificate you generated in earlier steps.
 
-
-First, from the `BitBetter/src/licenseGen` directory, **build the license generator**.<sup>[2](#f2)</sup>
+First, change to the`BitBetter/src/licenseGen` directory, then replace the Dockerfile with the one for manually building, and finally **build the license generator**.<sup>[2](#f2)</sup>
 
 ```bash
+cd BitBetter/src/licenseGen
+mv -f ../../.build/Dockerfile.licenseGen ./Dockerfile
 ./build.sh
 ```
 
@@ -120,9 +242,6 @@ Additional, instead of interactive mode, you can also pass the parameters direct
 ./src/licenseGen/run.sh /Absolute/Path/To/BitBetter/.keys/cert.pfx user "Name" "EMail" "User-GUID"
 ./src/licenseGen/run.sh /Absolute/Path/To/BitBetter/.keys/cert.pfx org "Name" "EMail" "Install-ID used to install the server"
 ```
-
----
-
 
 # FAQ: Questions you might have.
 
