@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1 as build
+FROM mcr.microsoft.com/dotnet/sdk as build
 
 WORKDIR /licenseGen
 
@@ -12,6 +12,6 @@ RUN set -e; set -x; \
 
 FROM ayitaka/bitbetter-api:latest
 
-COPY --from=build /licenseGen/bin/Debug/netcoreapp3.1/publish/* /app/
+COPY --from=build /licenseGen/bin/Debug/netcoreapp5.0/publish/* /app/
 
 ENTRYPOINT [ "dotnet", "/app/licenseGen.dll", "--core", "/app/Core.dll", "--cert", "/cert.pfx" ]
