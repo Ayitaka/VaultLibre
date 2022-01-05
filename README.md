@@ -2,13 +2,16 @@
 <a href="https://hub.docker.com/r/ayitaka/bitbetter-api"><img alt="Docker Pulls" src="https://img.shields.io/docker/pulls/ayitaka/bitbetter-api.svg"></a>
 # BitBetter
 
-BitBetter is is a tool to modify Bitwarden's core dll to allow you to generate your own individual and organisation licenses. **You must have an existing installation of Bitwarden for BitBetter to modify.**
+BitBetter is a tool to modify Bitwarden's core dll to allow you to generate your own individual and organisation licenses. **You must have an existing installation of Bitwarden for BitBetter to modify.**
 
 Please see the FAQ below for details on why this software was created.
 
 _Beware! BitBetter does janky stuff to rewrite the bitwarden core dll and allow the installation of a self signed certificate. Use at your own risk!_
 
-Credit to https://github.com/h44z/BitBetter and https://github.com/jakeswenson/BitBetter
+Credit to:
+https://github.com/jakeswenson/BitBetter for the main project
+https://github.com/h44z/BitBetter for many invaluable contributions
+https://github.com/alexyao2015/BitBetter for creating the starting point for adding docker images
 
 # Table of Contents
 1. [Getting Started](#getting-started)
