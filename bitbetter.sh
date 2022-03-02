@@ -18,7 +18,7 @@
 #
 # linter: https://www.shellcheck.net/
 
-SCRIPT_VERSION="1.0.0"
+SCRIPT_VERSION="1.0.1"
 
 GITHUB="Ayitaka"
 REPO="BitBetter"
