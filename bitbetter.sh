@@ -54,7 +54,7 @@ initilize() {
 		read -rp "Location of Bitwarden's base directory: " BITWARDEN_BASE
 	done
 
-	BW_VERSION="$(curl --silent https://raw.githubusercontent.com/bitwarden/server/master/scripts/bitwarden.sh | grep 'COREVERSION="' | sed 's/^[^"]*"//; s/".*//')"
+	BW_VERSION="$(curl --silent https://raw.githubusercontent.com/bitwarden/self-host/master/bitwarden.sh | grep 'COREVERSION="' | sed 's/^[^"]*"//; s/".*//')"
 	BB_VERSION="$(curl --silent https://raw.githubusercontent.com/Ayitaka/BitBetter/master/bw_version.txt)"
 
 	# Run main function
