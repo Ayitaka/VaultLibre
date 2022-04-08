@@ -18,7 +18,7 @@
 #
 # linter: https://www.shellcheck.net/
 
-SCRIPT_VERSION="1.0.2"
+SCRIPT_VERSION="1.0.3"
 
 GITHUB="Ayitaka"
 REPO="BitBetter"
@@ -54,7 +54,7 @@ initilize() {
 		read -rp "Location of Bitwarden's base directory: " BITWARDEN_BASE
 	done
 
-	BW_VERSION="$(curl --silent https://raw.githubusercontent.com/bitwarden/self-host/master/bitwarden.sh | grep 'COREVERSION="' | sed 's/^[^"]*"//; s/".*//')"
+	BW_VERSION=$(curl -sL https://go.btwrdn.co/bw-sh-versions | grep  '^ *"'coreVersion'":' | awk -F\: '{ print $2 }' | sed -e 's/,$//' -e 's/^"//' -e 's/"$//')
 	BB_VERSION="$(curl --silent https://raw.githubusercontent.com/Ayitaka/BitBetter/master/bw_version.txt)"
 
 	# Run main function
