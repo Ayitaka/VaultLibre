@@ -22,7 +22,7 @@ SCRIPT_VERSION="1.0.3"
 
 GITHUB="Ayitaka"
 REPO="BitBetter"
-BRANCH="master"
+BRANCH="main"
 DOCKERHUB="ayitaka"
 DOCKERHUBREPOAPI="bitbetter-api"
 DOCKERHUBREPOIDENTITY="bitbetter-identity"
@@ -55,7 +55,7 @@ initilize() {
 	done
 
 	BW_VERSION=$(curl -sL https://go.btwrdn.co/bw-sh-versions | grep  '^ *"'coreVersion'":' | awk -F\: '{ print $2 }' | sed -e 's/,$//' -e 's/^"//' -e 's/"$//')
-	BB_VERSION="$(curl --silent https://raw.githubusercontent.com/Ayitaka/BitBetter/master/bw_version.txt)"
+	BB_VERSION="$(curl --silent https://raw.githubusercontent.com/Ayitaka/BitBetter/main/bw_version.txt)"
 
 	# Run main function
 	main

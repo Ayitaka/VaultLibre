@@ -44,7 +44,7 @@ The easiest way to install BitBetter is to use the bitbetter script which utiliz
 #### Run the install script:
 
 ```bash
-curl --retry 3 "https://raw.githubusercontent.com/Ayitaka/BitBetter/master/bitbetter.sh" -o "./bitbetter.sh" && chmod 0755 ./bitbetter.sh && ./bitbetter.sh install
+curl --retry 3 "https://raw.githubusercontent.com/Ayitaka/BitBetter/main/bitbetter.sh" -o "./bitbetter.sh" && chmod 0755 ./bitbetter.sh && ./bitbetter.sh install
 ```
 
 For available options, see [Script Options](#script-options)
@@ -131,7 +131,7 @@ Alternatively, you can build the docker images yourself using the BitBetter sour
 
 #### Using the bitbetter script:
 ```bash
-curl --retry 3 "https://raw.githubusercontent.com/Ayitaka/BitBetter/master/bitbetter.sh" -o "./bitbetter.sh" && chmod 0755 ./bitbetter.sh && ./bitbetter.sh install build
+curl --retry 3 "https://raw.githubusercontent.com/Ayitaka/BitBetter/main/bitbetter.sh" -o "./bitbetter.sh" && chmod 0755 ./bitbetter.sh && ./bitbetter.sh install build
 ```
 
 ---
