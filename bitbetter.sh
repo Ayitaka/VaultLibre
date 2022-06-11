@@ -3,22 +3,22 @@
 # Install and Update BitBetter from Docker Hub images or build from Github src
 #
 # ./bitbetter.sh
-# ./bitbetter.sh install 		[auto] [regencerts] [recreate]				- Install using images from Docker Hub
-# ./bitbetter.sh install build 	[auto] [regencerts] [recreate]				- Install/build from Github src
+# ./bitbetter.sh install        [auto] [regencerts] [recreate]              - Install using images from Docker Hub
+# ./bitbetter.sh install build  [auto] [regencerts] [recreate]              - Install/build from Github src
 #
-# ./bitbetter.sh update			[auto] [regencerts] [recreate] [restart]	- Update using images from Docker Hub
-# ./bitbetter.sh update build	[auto] [regencerts] [recreate] [restart]	- Update from Github src
-# ./bitbetter.sh update rebuild	[auto] [regencerts] [recreate] [restart]	- Update/force rebuild from Github src
+# ./bitbetter.sh update	        [auto] [regencerts] [recreate] [restart]    - Update using images from Docker Hub
+# ./bitbetter.sh update build   [auto] [regencerts] [recreate] [restart]    - Update from Github src
+# ./bitbetter.sh update rebuild	[auto] [regencerts] [recreate] [restart]    - Update/force rebuild from Github src
 #
-# AUTO			Skip prompts, update this script, create certs only if they do not exist, and recreate docker-compose.override.yml
-# REGENCERTS	Force regeneratioin of certificates
-# RECREATE		Force recreation of docker-compose.override.yml
-# RESTART		Force restart of Bitwarden if Bitwarden's update does not do a restart
-# LOCALTIME		Force Bitwarden to write logs using localtime instead of UTC (use with RECREATE, or it has no effect)
+# AUTO          Skip prompts, update this script, create certs only if they do not exist, and recreate docker-compose.override.yml
+# REGENCERTS    Force regeneratioin of certificates
+# RECREATE      Force recreation of docker-compose.override.yml
+# RESTART       Force restart of Bitwarden if Bitwarden's update does not do a restart
+# LOCALTIME     Force Bitwarden to write logs using localtime instead of UTC (use with RECREATE, or it has no effect)
 #
 # linter: https://www.shellcheck.net/
 
-SCRIPT_VERSION="1.0.3"
+SCRIPT_VERSION="1.0.4"
 
 GITHUB="Ayitaka"
 REPO="BitBetter"
