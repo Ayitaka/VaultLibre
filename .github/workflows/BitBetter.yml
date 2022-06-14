@@ -66,7 +66,7 @@ jobs:
           docker build -f ./src/bitBetter/Dockerfile --build-arg BITWARDEN_TAG=bitwarden/identity:${{ needs.check_version.outputs.buildversion }} --label com.bitwarden.product="bitbetter" -t ${DOCKERHUB}/${DOCKERHUBREPOIDENTITY} .
       - name: Login
         run: |
-          docker login -u ${{ secrets.dockerID }} -p ${{ secrets.dockerPassword }}
+          echo ${{ secrets.dockerPassword }} | docker login -u ${{ secrets.dockerID }} --password-stdin
       - name: Deploy Latest
         run: |
           docker tag ${DOCKERHUB}/${DOCKERHUBREPOAPI} ${DOCKERHUB}/${DOCKERHUBREPOAPI}:latest
@@ -109,7 +109,7 @@ jobs:
           docker build -f ./src/licenseGen/Dockerfile --label com.bitwarden.product="licensegen" -t ${DOCKERHUB}/${DOCKERHUBREPOLICENSEGEN} .
       - name: Login
         run: |
-          docker login -u ${{ secrets.dockerID }} -p ${{ secrets.dockerPassword }}
+          echo ${{ secrets.dockerPassword }} | docker login -u ${{ secrets.dockerID }} --password-stdin
       - name: Deploy Latest
         run: |
           docker tag ${DOCKERHUB}/${DOCKERHUBREPOLICENSEGEN} ${DOCKERHUB}/${DOCKERHUBREPOLICENSEGEN}:latest
