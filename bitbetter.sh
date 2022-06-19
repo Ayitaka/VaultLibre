@@ -18,7 +18,7 @@
 #
 # linter: https://www.shellcheck.net/
 
-SCRIPT_VERSION="1.0.4"
+SCRIPT_VERSION="1.0.5"
 
 GITHUB="Ayitaka"
 REPO="BitBetter"
@@ -247,18 +247,22 @@ recreate_override() {
 		        echo "  identity:"
 		        echo "    image: bitbetter/identity:$BW_VERSION"
 			else
-				echo "version: '3'"
-				echo ""
-				echo "services:"
-				echo "  api:"
-				echo "    image: ${DOCKERHUB}/${DOCKERHUBREPOAPI}:$BW_VERSION"
-				echo "    volumes:"
-				echo "      - ../bitbetter/cert.cert:/newLicensing.cer"
-				echo ""
-				echo "  identity:"
-				echo "    image: ${DOCKERHUB}/${DOCKERHUBREPOIDENTITY}:$BW_VERSION"
-				echo "    volumes:"
-				echo "      - ../bitbetter/cert.cert:/newLicensing.cer"
+				if [ -f 'bitbetter.custom.override.yml' ]; then
+					echo "$( cat bitbetter.custom.override.yml )"
+				else
+					echo "version: '3'"
+					echo ""
+					echo "services:"
+					echo "  api:"
+					echo "    image: ${DOCKERHUB}/${DOCKERHUBREPOAPI}:$BW_VERSION"
+					echo "    volumes:"
+					echo "      - ../bitbetter/cert.cert:/newLicensing.cer"
+					echo ""
+					echo "  identity:"
+					echo "    image: ${DOCKERHUB}/${DOCKERHUBREPOIDENTITY}:$BW_VERSION"
+					echo "    volumes:"
+					echo "      - ../bitbetter/cert.cert:/newLicensing.cer"
+				fi
 			fi
 
 			if [ "${LOCALTIME}" ]; then
