@@ -18,14 +18,14 @@
 #
 # linter: https://www.shellcheck.net/
 
-SCRIPT_VERSION="1.0.5"
+SCRIPT_VERSION="1.0.6"
 
 GITHUB="Ayitaka"
 REPO="BitBetter"
 BRANCH="main"
-DOCKERHUB="ayitaka"
-DOCKERHUBREPOAPI="bitbetter-api"
-DOCKERHUBREPOIDENTITY="bitbetter-identity"
+export DOCKERHUB="ayitaka"
+export DOCKERHUBREPOAPI="bitbetter-api"
+export DOCKERHUBREPOIDENTITY="bitbetter-identity"
 
 initilize() {
 	# Check that necessary commands are available
@@ -54,7 +54,7 @@ initilize() {
 		read -rp "Location of Bitwarden's base directory: " BITWARDEN_BASE
 	done
 
-	BW_VERSION=$(curl -sL https://go.btwrdn.co/bw-sh-versions | grep  '^ *"'coreVersion'":' | awk -F\: '{ print $2 }' | sed -e 's/,$//' -e 's/^"//' -e 's/"$//')
+	export BW_VERSION=$(curl -sL https://go.btwrdn.co/bw-sh-versions | grep  '^ *"'coreVersion'":' | awk -F\: '{ print $2 }' | sed -e 's/,$//' -e 's/^"//' -e 's/"$//')
 	BB_VERSION="$(curl --silent https://raw.githubusercontent.com/Ayitaka/BitBetter/main/bw_version.txt)"
 
 	# Run main function
@@ -248,7 +248,7 @@ recreate_override() {
 		        echo "    image: bitbetter/identity:$BW_VERSION"
 			else
 				if [ -f 'bitbetter.custom.override.yml' ]; then
-					echo "$( cat bitbetter.custom.override.yml )"
+					echo "$( cat bitbetter.custom.override.yml )" | envsubst
 				else
 					echo "version: '3'"
 					echo ""
