@@ -245,6 +245,25 @@ Additional, instead of interactive mode, you can also pass the parameters direct
 ./src/licenseGen/run.sh /Absolute/Path/To/BitBetter/.keys/cert.pfx user "Name" "EMail" "User-GUID"
 ./src/licenseGen/run.sh /Absolute/Path/To/BitBetter/.keys/cert.pfx org "Name" "EMail" "Install-ID used to install the server"
 ```
+## Using a custom docker-compose.override.yml
+
+If you want to use a custom docker-compose.override.yml you can do so by creating a file named bitbetter.custom.override.yml and placing it in the same directory as the bitbetter.sh script.
+
+Following is an example with the barest minimum of requirements for the custom file's contents:
+
+```version: '3'
+
+services:
+    api:
+    image: ${DOCKERHUB}/${DOCKERHUBREPOAPI}:$BW_VERSION
+    volumes:
+      - ../bitbetter/cert.cert:/newLicensing.cer
+
+  identity:
+    image: ${DOCKERHUB}/${DOCKERHUBREPOIDENTITY}:$BW_VERSION
+    volumes:
+      - ../bitbetter/cert.cert:/newLicensing.cer
+```
 
 # FAQ: Questions you might have.
 
