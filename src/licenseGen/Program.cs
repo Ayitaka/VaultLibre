@@ -88,9 +88,9 @@ namespace bitwardenSelfLicensor
 
                             while (businessname == "")
                             {
-                                WriteLineOver("Please enter a business name, default is BitBetter. [Business Name]:");
+                                WriteLineOver("Please enter a business name, default is VaultLibre. [Business Name]:");
                                 buff = Console.ReadLine();
-                                if (buff == "")                     businessname = "BitBetter";
+                                if (buff == "")                     businessname = "VaultLibre";
                                 else if (checkBusinessName(buff))   businessname = buff;
                             }
                         }
@@ -352,7 +352,7 @@ namespace bitwardenSelfLicensor
             set("Id", Guid.NewGuid());
             set("Name", userName);
             set("BillingEmail", email);
-            set("BusinessName", string.IsNullOrWhiteSpace(businessName) ? "BitBetter" : businessName);
+            set("BusinessName", string.IsNullOrWhiteSpace(businessName) ? "VaultLibre" : businessName);
             set("Enabled", true);
             set("Plan", "Custom");
             set("PlanType", (byte)6);

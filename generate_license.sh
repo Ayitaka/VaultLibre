@@ -1,9 +1,9 @@
 #!/bin/bash
 
 GITHUB="Ayitaka"
-REPO="BitBetter"
+REPO="VaultLibre"
 DOCKERHUB="ayitaka"
-DOCKERHUBREPOLICENSEGEN="bitbetter-licensegen"
+DOCKERHUBREPOLICENSEGEN="vaultlibre-licensegen"
 
 if [ -e "${PWD}/bwdata/env/global.override.env" ]; then
         SERVER_INSTALLATION_ID=$( grep 'globalSettings__installation__id=' $PWD/bwdata/env/global.override.env | awk -F"=" '{print $2}' )
@@ -20,7 +20,7 @@ BUISNESS_NAME=''
 
 if [ "${1,,}" == "help" ] || [ "${1,,}" == "--help" ] || [ "${1,,}" == "-h" ]; then
         echo ""
-        echo "For use with BitBetter:"
+        echo "For use with VaultLibre:"
 		echo "https://github.com/${GITHUB}/${REPO}"
 		echo ""
         echo "https://github.com/jakeswenson/BitBetter"
@@ -106,4 +106,4 @@ if [ "${TYPE}" == "org" ]; then
 fi
 
 docker pull ${DOCKERHUB}/${DOCKERHUBREPOLICENSEGEN}:latest
-docker run -it --rm -v $PWD/bwdata/bitbetter/cert.pfx:/cert.pfx ${DOCKERHUB}/${DOCKERHUBREPOLICENSEGEN}:latest "${TYPE}" "${NAME}" "${EMAIL}" "${GUID}" "${BUSINESS_NAME}"
+docker run -it --rm -v $PWD/bwdata/vaultlibre/cert.pfx:/cert.pfx ${DOCKERHUB}/${DOCKERHUBREPOLICENSEGEN}:latest "${TYPE}" "${NAME}" "${EMAIL}" "${GUID}" "${BUSINESS_NAME}"

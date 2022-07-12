@@ -5,7 +5,7 @@ BW_VERSION="$(curl --silent https://raw.githubusercontent.com/bitwarden/server/m
 
 echo "Starting Bitwarden update, newest server version: $BW_VERSION"
 
-# Default path is the parent directory of the BitBetter location
+# Default path is the parent directory of the VaultLibre location
 BITWARDEN_BASE="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." >/dev/null 2>&1 && pwd )"
 
 # Get Bitwarden base from user (or keep default value)
@@ -28,19 +28,19 @@ then
         echo ""
         echo "services:"
         echo "  api:"
-        echo "    image: bitbetter/api:$BW_VERSION"
+        echo "    image: vaultlibre/api:$BW_VERSION"
         echo ""
         echo "  identity:"
-        echo "    image: bitbetter/identity:$BW_VERSION"
+        echo "    image: vaultlibre/identity:$BW_VERSION"
         echo ""
     } > $BITWARDEN_BASE/bwdata/docker/docker-compose.override.yml
-    echo "BitBetter docker-compose override created!"
+    echo "VaultLibre docker-compose override created!"
 else
     echo "Make sure to check if the docker override contains the correct image version ($BW_VERSION) in $BITWARDEN_BASE/bwdata/docker/docker-compose.override.yml!"
 fi
 
-# Check if user wants to rebuild the bitbetter images
-docker images bitbetter/api --format="{{ .Tag }}" | grep -F -- "${BW_VERSION}" > /dev/null
+# Check if user wants to rebuild the vaultlibre images
+docker images vaultlibre/api --format="{{ .Tag }}" | grep -F -- "${BW_VERSION}" > /dev/null
 retval=$?
 REBUILD_BB="n"
 REBUILD_BB_DESCR="[y/N]"
@@ -48,13 +48,13 @@ if [ $retval -ne 0 ]; then
     REBUILD_BB="y"
     REBUILD_BB_DESCR="[Y/n]"
 fi
-read -p "Rebuild BitBetter images? $REBUILD_BB_DESCR: " tmprebuild
+read -p "Rebuild VaultLibre images? $REBUILD_BB_DESCR: " tmprebuild
 REBUILD_BB=${tmprebuild:-$REBUILD_BB}
 
 if [[ $REBUILD_BB =~ ^[Yy]$ ]]
 then
     ./build.sh
-    echo "BitBetter images updated to version: $BW_VERSION"
+    echo "VaultLibre images updated to version: $BW_VERSION"
 fi
 
 # Now start the bitwarden update

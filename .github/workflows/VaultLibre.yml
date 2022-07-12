@@ -1,0 +1,185 @@
+name: VaultLibre Build And Release
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - "**.md"
+      - "**.json"
+  schedule:
+    - cron:  '11 */4 * * *'
+  workflow_dispatch:
+    inputs: {}
+
+env:
+  DOCKER_HUB: ayitaka
+  DOCKER_HUB_REPO_API: vaultlibre-api
+  DOCKER_HUB_REPO_IDENTITY: vaultlibre-identity
+  DOCKER_HUB_REPO_LICENSEGEN: vaultlibre-licensegen
+  
+jobs:
+  check_version:
+    name: Check Last Built Version
+    runs-on: ubuntu-latest
+    outputs:
+      newer_version: ${{ steps.check_version.outputs.newer_version }}
+      bitwarden_core_version: ${{ steps.check_version.outputs.bitwarden_core_version }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Get Latest Version
+        id: check_version
+        run: |
+          BITWARDEN_CORE_VERSION=$(curl -sL https://raw.githubusercontent.com/bitwarden/self-host/master/version.json | jq -r ".versions.coreVersion")
+          VAULTLIBRE_CORE_VERSION=$(cat versions.json | jq -r '.versions.Bitwarden.coreVersion')
+          VAULTLIBRE_STEP_VERSION=$(cat versions.json | jq -r '.versions.VaultLibre.stepVersion')
+          
+          if [ $BITWARDEN_CORE_VERSION != $VAULTLIBRE_CORE_VERSION ]; then
+            NEWER_VERSION=true
+          else
+            NEWER_VERSION=false          
+          fi
+          echo "##[set-output name=newer_version;]$NEWER_VERSION"
+          echo "##[set-output name=bitwarden_core_version;]$BITWARDEN_CORE_VERSION"
+
+  build_vaultlibre:
+    name: Publish VaultLibre
+    runs-on: ubuntu-latest
+    needs: check_version
+    if: ${{ needs.check_version.outputs.newer_version == 'true' || github.event_name == 'workflow_dispatch' }}
+    ## || github.event_name == 'push' 
+    env:
+      BITWARDEN_CORE_VERSION: ${{ needs.check_version.outputs.bitwarden_core_version }}
+      STEPVERSION: 0
+      MESSAGE: "Update"
+      
+    outputs:
+      vaultlibre_version: ${{ steps.set_version.outputs.vaultlibre_version }}
+      release_note: ${{ steps.set_version.outputs.release_note }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        id: build_image
+
+      - name: Build VaultLibre Images
+        run: |
+          docker build -f ./src/vaultlibre/Dockerfile --build-arg BITWARDEN_TAG=bitwarden/api:${BITWARDEN_CORE_VERSION} --label com.bitwarden.product="vaultlibre" -t ${DOCKER_HUB}/${DOCKER_HUB_REPO_API} .
+          docker build -f ./src/vaultlibre/Dockerfile --build-arg BITWARDEN_TAG=bitwarden/identity:${BITWARDEN_CORE_VERSION} --label com.bitwarden.product="vaultlibre" -t ${DOCKER_HUB}/${DOCKER_HUB_REPO_IDENTITY} .
+
+      - name: Login
+        run: |
+          echo ${{ secrets.dockerPassword }} | docker login -u ${{ secrets.dockerID }} --password-stdin
+
+      - name: Deploy Latest
+        run: |
+          docker tag ${DOCKER_HUB}/${DOCKER_HUB_REPO_API} ${DOCKER_HUB}/${DOCKER_HUB_REPO_API}:latest
+          docker tag ${DOCKER_HUB}/${DOCKER_HUB_REPO_IDENTITY} ${DOCKER_HUB}/${DOCKER_HUB_REPO_IDENTITY}:latest
+          docker push ${DOCKER_HUB}/${DOCKER_HUB_REPO_API}:latest
+          docker push ${DOCKER_HUB}/${DOCKER_HUB_REPO_IDENTITY}:latest
+          echo ${DOCKER_HUB}/${DOCKER_HUB_REPO_API}:latest Deployed
+          echo ${DOCKER_HUB}/${DOCKER_HUB_REPO_IDENTITY}:latest Deployed
+
+      - name: Deploy Tag
+        run: |
+          docker tag ${DOCKER_HUB}/${DOCKER_HUB_REPO_API} ${DOCKER_HUB}/${DOCKER_HUB_REPO_API}:${BITWARDEN_CORE_VERSION}
+          docker tag ${DOCKER_HUB}/${DOCKER_HUB_REPO_IDENTITY} ${DOCKER_HUB}/${DOCKER_HUB_REPO_IDENTITY}:${BITWARDEN_CORE_VERSION}
+          docker push ${DOCKER_HUB}/${DOCKER_HUB_REPO_API}:${BITWARDEN_CORE_VERSION}
+          docker push ${DOCKER_HUB}/${DOCKER_HUB_REPO_IDENTITY}:${BITWARDEN_CORE_VERSION}
+          echo ${DOCKER_HUB}/${DOCKER_HUB_REPO_API}:${BITWARDEN_CORE_VERSION} Deployed
+          echo ${DOCKER_HUB}/${DOCKER_HUB_REPO_IDENTITY}:${BITWARDEN_CORE_VERSION} Deployed
+
+      - name: Save Bitwarden/Step Version Numbers
+        id: set_version
+        run: |
+          VAULTLIBRE_CORE_VERSION=$(cat versions.json | jq -r '.versions.Bitwarden.coreVersion')
+          VAULTLIBRE_STEP_VERSION=$(cat versions.json | jq -r '.versions.VaultLibre.stepVersion')
+
+          if [ ${VAULTLIBRE_CORE_VERSION} == ${BITWARDEN_CORE_VERSION} ]; then
+            STEPVERSION=$(( ${VAULTLIBRE_STEP_VERSION} + 1 ))
+            MESSAGE="VaultLibre Step Version Update"
+          else
+            STEPVERSION=0
+            MESSAGE="Bitwarden Core Version Update"
+          fi
+
+          echo "MESSAGE=${MESSAGE}" >> $GITHUB_ENV
+
+          VAULTLIBRE_VERSION="${BITWARDEN_CORE_VERSION}.${STEPVERSION}"
+          
+          jq -n --arg coreversion "${BITWARDEN_CORE_VERSION}" --arg stepversion "${STEPVERSION}" --arg vaultlibreversion "${VAULTLIBRE_VERSION}" '{versions: {Bitwarden: {coreVersion: $coreversion}, VaultLibre: {stepVersion: $stepversion, fullVersion: $vaultlibreversion}}}' > versions.json
+
+          echo "##[set-output name=vaultlibre_version;]$VAULTLIBRE_VERSION"
+          echo "##[set-output name=release_note;]$MESSAGE"
+
+#      - name: Commit changes
+#        uses: EndBug/add-and-commit@v4
+#        with:
+#          message: ${MESSAGE}
+#          add: "versions.json"
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Commit updated files
+        run: |
+          echo "MESSAGE: ${MESSAGE}"
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git commit -m "${MESSAGE}" -a
+
+      - name: Push changes
+        run: git push
+        
+  build_license_generator:
+    name: Publish License Generator
+    runs-on: ubuntu-latest
+    needs: [check_version, build_vaultlibre]
+    if: ${{ needs.check_version.outputs.newer_version == 'true' || github.event_name == 'workflow_dispatch' }}
+    ## || github.event_name == 'push' 
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        id: build_image
+
+      - name: Build Image
+        run: |
+          docker build -f ./src/licenseGen/Dockerfile --label com.bitwarden.product="licensegen" -t ${DOCKER_HUB}/${DOCKER_HUB_REPO_LICENSEGEN} .
+
+      - name: Login
+        run: |
+          echo ${{ secrets.dockerPassword }} | docker login -u ${{ secrets.dockerID }} --password-stdin
+
+      - name: Deploy Latest
+        run: |
+          docker tag ${DOCKER_HUB}/${DOCKER_HUB_REPO_LICENSEGEN} ${DOCKER_HUB}/${DOCKER_HUB_REPO_LICENSEGEN}:latest
+          docker push ${DOCKER_HUB}/${DOCKER_HUB_REPO_LICENSEGEN}:latest
+          echo ${DOCKER_HUB}/${DOCKER_HUB_REPO_LICENSEGEN}:latest Deployed
+
+  release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    needs: [check_version, build_vaultlibre, build_license_generator]
+    if: ${{ needs.check_version.outputs.newer_version == 'true' || github.event_name == 'workflow_dispatch' }}
+
+    env:
+      VAULTLIBRE_VERSION: ${{ needs.build_vaultlibre.outputs.vaultlibre_version }}
+      RELEASE_NOTE: ${{ needs.build_vaultlibre.outputs.release_note }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Create Release
+        uses: ncipollo/release-action@95215a3cb6e6a1908b3c44e00b4fdb15548b1e09
+        with:
+          commit: ${{ github.sha }}
+          tag: "v${{ needs.build_vaultlibre.outputs.vaultlibre_version }}"
+          name: "Version ${{ needs.build_vaultlibre.outputs.vaultlibre_version }}"
+          body: "${{ needs.build_vaultlibre.outputs.release_note }}"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          replacesArtifacts: false
+          allowUpdates: true
+          generateReleaseNotes: true

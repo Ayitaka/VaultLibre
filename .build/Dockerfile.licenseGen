@@ -10,7 +10,7 @@ RUN set -e; set -x; \
 	&& dotnet publish
 
 
-FROM bitbetter/api
+FROM vaultlibre/api
 
 COPY --from=build /licenseGen/bin/Debug/netcoreapp3.1/publish/* /app/
 

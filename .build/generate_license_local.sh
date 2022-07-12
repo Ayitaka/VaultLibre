@@ -15,7 +15,7 @@ BUISNESS_NAME=''
 
 if [ "${1,,}" == "help" ] || [ "${1,,}" == "--help" ] || [ "${1,,}" == "-h" ]; then
         echo ""
-        echo "For use with BitBetter:"
+        echo "For use with VaultLibre:"
         echo "https://github.com/${GITHUB}/${REPO}"
         echo ""
         echo "https://github.com/jakeswenson/BitBetter"
@@ -100,4 +100,4 @@ if [ "${TYPE}" == "org" ]; then
         done
 fi
 
-/root/BitBetter/src/licenseGen/run.sh /root/BitBetter/.keys/cert.pfx "${TYPE}" "${NAME}" "${EMAIL}" "${GUID}" "${BUSINESS_NAME}"
+/root/VaultLibre/src/licenseGen/run.sh /root/VaultLibre/.keys/cert.pfx "${TYPE}" "${NAME}" "${EMAIL}" "${GUID}" "${BUSINESS_NAME}"

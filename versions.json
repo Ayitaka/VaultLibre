@@ -1,0 +1,11 @@
+{
+  "versions": {
+    "Bitwarden": {
+      "coreVersion": "2022.5.0"
+    },
+    "VaultLibre": {
+      "stepVersion": "0",
+      "fullVersion": "2022.5.0.0"
+    }
+  }
+}

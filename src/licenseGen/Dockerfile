@@ -10,7 +10,7 @@ RUN set -e; set -x; \
 	&& dotnet publish
 
 
-FROM ayitaka/bitbetter-api:latest
+FROM ayitaka/vaultlibre-api:latest
 
 COPY --from=build /licenseGen/bin/Debug/netcoreapp5.0/publish/* /app/
 
