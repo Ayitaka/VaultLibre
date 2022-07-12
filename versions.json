@@ -4,8 +4,8 @@
       "coreVersion": "2022.6.2"
     },
     "VaultLibre": {
-      "stepVersion": "0",
-      "fullVersion": "2022.6.2.0"
+      "stepVersion": "1",
+      "fullVersion": "2022.6.2.1"
     }
   }
 }
