@@ -183,3 +183,4 @@ jobs:
           replacesArtifacts: false
           allowUpdates: true
           generateReleaseNotes: true
+          discussionCategory: -releases
