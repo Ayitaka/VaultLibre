@@ -374,6 +374,8 @@ namespace bitwardenSelfLicensor
             set("Expires", DateTime.UtcNow.AddYears(100));
             set("Trial", false);
             set("UseApi", true);
+            set("UseResetPassword", true);
+            set("UseKeyConnector", true);
 
             set("Hash", Convert.ToBase64String((byte[])type.GetMethod("ComputeHash").Invoke(license, new object[0])));
             set("Signature", Convert.ToBase64String((byte[])type.GetMethod("Sign").Invoke(license, new object[] { cert })));
