@@ -369,6 +369,17 @@ update_bitwarden() {
 	# ids=$( docker images vaultlibre/* --format="{{ .ID }} {{ .Tag }}" | grep -E -v -- "latest|${BW_VERSION}" | awk '{ print $1 }' )
 }
 
+generate_license() {
+	get_generate_license_script
+	./vl_generate_license "$*"
+}
+
+generate_license_build() {
+	BUILD=1
+	export BUILD
+	generate_license
+}
+
 show_help() {
 	echo "### vaultlibre.sh v${SCRIPT_VERSION} ###"
 	echo ''
@@ -388,6 +399,19 @@ show_help() {
 	echo "RESTART       Force restart of Bitwarden if Bitwarden's update does not do a restart"
 	echo 'LOCALTIME     Force Bitwarden to write logs using localtime instead of UTC'
 	echo ''
+	echo '--------------------------------------------------------------------------------------------------------------------------------'
+	echo ''
+	echo 'Generate licenses'
+	echo ''
+	echo './vaultlibre.sh generate_license|-gl help'
+	echo './vaultlibre.sh generate_license|-gl user USERS_NAME EMAIL USERS_GUID'
+	echo './vaultlibre.sh generate_license|-gl org ORGS_NAME EMAIL BUSINESS_NAME'
+	echo ''
+	echo 'Generate licenses when you build from Github src'
+	echo ''
+	echo './vaultlibre.sh generate_license_build|-glb help'
+	echo './vaultlibre.sh generate_license_build|-glb user USERS_NAME EMAIL USERS_GUID'
+	echo './vaultlibre.sh generate_license_build|-glb org ORGS_NAME EMAIL BUSINESS_NAME'
 }
 
 check_cmd() {
@@ -402,6 +426,12 @@ say() {
 
 if [[ "${1,,}" =~ help|-h|--help ]]; then
 	show_help
+	exit 0
+elif [[ "${1,,}" =~ generate_license|-gl|--generate_license ]]; then
+	generate_license
+	exit 0
+elif [[ "${1,,}" =~ generate_license_build|-glb|--generate_license_build ]]; then
+	generate_license_build
 	exit 0
 fi
 
