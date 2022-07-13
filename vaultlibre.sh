@@ -372,13 +372,13 @@ update_bitwarden() {
 generate_license() {
 	get_generate_license_script
 	shift
-	./vl_generate_license.sh "$*"
+	./vl_generate_license.sh "${*}"
 }
 
 generate_license_build() {
 	BUILD=1
 	export BUILD
-	generate_license
+	generate_license "${@}"
 }
 
 show_help() {
@@ -429,10 +429,10 @@ if [[ "${1,,}" =~ help|-h|--help ]]; then
 	show_help
 	exit 0
 elif [[ "${1,,}" =~ generate_license|-gl|--generate_license ]]; then
-	generate_license
+	generate_license "${@}"
 	exit 0
 elif [[ "${1,,}" =~ generate_license_build|-glb|--generate_license_build ]]; then
-	generate_license_build
+	generate_license_build "${@}"
 	exit 0
 fi
 
