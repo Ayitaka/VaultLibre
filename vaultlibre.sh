@@ -372,7 +372,7 @@ update_bitwarden() {
 generate_license() {
 	get_generate_license_script
 	shift
-	./vl_generate_license.sh "${*}"
+	./vl_generate_license.sh "${@}"
 }
 
 generate_license_build() {
