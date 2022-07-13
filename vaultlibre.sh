@@ -134,9 +134,9 @@ compatibility_updates() {
                 fi
         fi
 
-        if [ -f 'bitbetter.custom.override.yml' ] && [ ! -f 'vaultlibre.custom.override.yml' ]; then
-                mv 'bitbetter.custom.override.yml' 'vaultlibre.custom.override.yml'
-				sed -i 's/bitbetter/vaultlibre/g' vaultlibre.custom.override.yml
+        if [ -f 'bitbetter.custom.override.yml' ] && [ ! -f 'vl.custom.override.yml' ]; then
+                mv 'bitbetter.custom.override.yml' 'vl.custom.override.yml'
+				sed -i 's/bitbetter/vaultlibre/g' vl.custom.override.yml
         fi
 
 }
@@ -283,9 +283,9 @@ recreate_override() {
 		        echo "  identity:"
 		        echo "    image: vaultlibre/identity:$BW_VERSION"
 			else
-				if [ -f 'vaultlibre.custom.override.yml' ]; then
+				if [ -f 'vl.custom.override.yml' ]; then
 					# Read custom override and substitute exported variables used in override. i.e. ${DOCKERHUB}/${DOCKERHUBREPOAPI}:$BW_VERSION
-					envsubst < vaultlibre.custom.override.yml
+					envsubst < vl.custom.override.yml
 				else
 					echo "version: '3'"
 					echo ""
