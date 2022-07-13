@@ -371,7 +371,7 @@ update_bitwarden() {
 
 generate_license() {
 	get_generate_license_script
-	./vl_generate_license "$*"
+	./vl_generate_license.sh "$*"
 }
 
 generate_license_build() {
