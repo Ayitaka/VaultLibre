@@ -44,7 +44,7 @@ The easiest way to install VaultLibre is to use the vaultlibre script which util
 #### Run the install script:
 
 ```bash
-curl --retry 3 "https://raw.githubusercontent.com/Ayitaka/VaultLibre/main/vaultlibre.sh" -o "./vaultlibre.sh" && chmod 0755 ./vaultlibre.sh && ./vaultlibre.sh install
+curl --retry 3 "https://raw.githubusercontent.com/Ayitaka/VaultLibre/main/vaultlibre.sh" -o "./vaultlibre.sh" && chmod 0700 ./vaultlibre.sh && ./vaultlibre.sh install
 ```
 
 For available options, see [Script Options](#script-options)
@@ -57,29 +57,29 @@ For available options, see [Script Options](#script-options)
 ```
 
 ## Generating Signed Licenses
-Licenses are used for enabling certain features. There are licenses for Users and for Organizations. When you install VaultLibre, a script called generate_license.sh is placed in the installation directory to make generating licenses easy.
+Licenses are used for enabling certain features. There are licenses for Users and for Organizations. When you install VaultLibre, a script called vl_generate_license.sh is placed in the installation directory to make generating licenses easy.
 
 #### For a user:
 ```bash
-./generate_license.sh user USERS_NAME EMAIL USERS_GUID
+./vl_generate_license.sh user USERS_NAME EMAIL USERS_GUID
 ```
 
-Example: generate_license.sh user SomeUser someuser@example.com 12345678-1234-1234-1234-123456789012
+Example: vl_generate_license.sh user SomeUser someuser@example.com 12345678-1234-1234-1234-123456789012
 
 ---
 
 #### For an Organization:
 ```bash
-./generate_license.sh org ORGS_NAME EMAIL BUSINESS_NAME
+./vl_generate_license.sh org ORGS_NAME EMAIL BUSINESS_NAME
 ```
 
-Example: generate_license.sh org "My Organization Display Name" admin@mybusinesscompany.com "My Company Inc."
+Example: vl_generate_license.sh org "My Organization Display Name" admin@mybusinesscompany.com "My Company Inc."
 
 ---
 
 #### Interactive Mode (will prompt you for required input):
 ```bash
-./generate_license.sh
+./vl_generate_license.sh
 ```
 
 # Script Options

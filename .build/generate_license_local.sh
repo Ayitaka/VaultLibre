@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ -e "${PWD}/bwdata/env/global.override.env" ]; then
-        SERVER_INSTALLATION_ID=$( grep 'globalSettings__installation__id=' $PWD/bwdata/env/global.override.env | awk -F"=" '{print $2}' )
+        SERVER_INSTALLATION_ID=$( grep 'globalSettings__installation__id=' "$PWD/bwdata/env/global.override.env" | awk -F"=" '{print $2}' )
 else
         echo "Unable to get globalSettings__installation__id from ${PWD}/bwdata/env/global.override.env. Aborting."
         exit 1
@@ -11,7 +11,7 @@ TYPE=''
 NAME=''
 EMAIL=''
 GUID=''
-BUISNESS_NAME=''
+BUSINESS_NAME=''
 
 if [ "${1,,}" == "help" ] || [ "${1,,}" == "--help" ] || [ "${1,,}" == "-h" ]; then
         echo ""

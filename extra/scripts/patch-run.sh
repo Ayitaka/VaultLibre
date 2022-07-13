@@ -14,5 +14,5 @@
 #
 # Credit to dlundgren for suggesting this and originally trying to add a proper PR for this (https://github.com/bitwarden/server/pull/1766)
 
-sed -iE 's/ renew --logs-dir/ renew --no-random-sleep-on-renew --logs-dir/' ${HOME}/bwdata/scripts/run.sh
+sed -iE 's/ renew --logs-dir/ renew --no-random-sleep-on-renew --logs-dir/' "${HOME}/bwdata/scripts/run.sh"
 

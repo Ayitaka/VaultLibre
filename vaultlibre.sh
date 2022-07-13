@@ -6,9 +6,9 @@
 # ./vaultlibre.sh install        [auto] [regencerts] [recreate]              - Install using images from Docker Hub
 # ./vaultlibre.sh install build  [auto] [regencerts] [recreate]              - Install/build from Github src
 #
-# ./vaultlibre.sh update	        [auto] [regencerts] [recreate] [restart]    - Update using images from Docker Hub
+# ./vaultlibre.sh updat          [auto] [regencerts] [recreate] [restart]    - Update using images from Docker Hub
 # ./vaultlibre.sh update build   [auto] [regencerts] [recreate] [restart]    - Update from Github src
-# ./vaultlibre.sh update rebuild	[auto] [regencerts] [recreate] [restart]    - Update/force rebuild from Github src
+# ./vaultlibre.sh update rebuild [auto] [regencerts] [recreate] [restart]    - Update/force rebuild from Github src
 #
 # AUTO          Skip prompts, update this script, create certs only if they do not exist, and recreate docker-compose.override.yml
 # REGENCERTS    Force regeneratioin of certificates
@@ -55,8 +55,10 @@ initilize() {
 		read -rp "Location of Bitwarden's base directory: " BITWARDEN_BASE
 	done
 
-	export BW_VERSION=$(curl -sL https://raw.githubusercontent.com/bitwarden/self-host/master/version.json | jq -r ".versions.coreVersion")
+	BW_VERSION=$(curl -sL https://raw.githubusercontent.com/bitwarden/self-host/master/version.json | jq -r ".versions.coreVersion")
+	export BW_VERSION
     VL_VERSION=$(curl -sL https://raw.githubusercontent.com/Ayitaka/VaultLibre/master/versions.json | jq -r ".versions.Bitwarden.coreVersion")
+	export VL_VERSION
 
 	# Run main function
 	main
@@ -75,6 +77,8 @@ main() {
 
 	get_generate_license_script
 
+
+	# shellcheck disable=SC2153 # REGENCERTS is a command-line option turned into a "boolean" variable in initilize()
 	if [ "${INSTALL}" ] || [ "${REGENCERTS}" ]; then
 		regenerate_certs
 	fi
@@ -99,6 +103,7 @@ update_self() {
 		fi
 
 		if [ "${AUTO}" ] || [[ $UPDATE_SCRIPT =~ ^[Yy]$ ]]; then
+			# shellcheck disable=SC2086 # Quoting makes ${ARG} incorrectly interpretted in certain situations
 			curl --silent --retry 3 "https://raw.githubusercontent.com/${GITHUB}/${REPO}/${BRANCH}/vaultlibre.sh" -o "./vaultlibre.sh.tmp" && chmod 0755 ./vaultlibre.sh.tmp && mv ./vaultlibre.sh.tmp ./vaultlibre.sh && ./vaultlibre.sh ${ARGS}
 		else
 			echo "Ok. Skipping update and exiting."
@@ -113,7 +118,7 @@ compatibility_updates() {
         # After renaming project to VaultLibre, keys will exist in old ${BITWARDEN_BASE}/bwdata/bitbetter and need to be moved to ${BITWARDEN_BASE}/bwdata/vaultlibre
         [ -d "${BITWARDEN_BASE}/bwdata/vaultlibre" ] || mkdir -p "${BITWARDEN_BASE}/bwdata/vaultlibre"
 
-        if [ -d "${BITWARDEN_BASE}/bwdata/bitbetter" ] && [ -n "$(ls -A ${BITWARDEN_BASE}/bwdata/bitbetter)" ]; then
+        if [ -d "${BITWARDEN_BASE}/bwdata/bitbetter" ] && [ -n "$(ls -A "${BITWARDEN_BASE}/bwdata/bitbetter")" ]; then
                 MOVE_CERTS='n'
 
                 if [ ! "${AUTO}" ]; then
@@ -124,8 +129,8 @@ compatibility_updates() {
                 fi
 
                 if [[ $MOVE_CERTS =~ ^[Yy]$ ]]; then
-                        mv ${BITWARDEN_BASE}/bwdata/bitbetter/* ${BITWARDEN_BASE}/bwdata/vaultlibre
-                        rm -rf ${BITWARDEN_BASE}/bwdata/bitbetter
+                        mv "${BITWARDEN_BASE}/bwdata/bitbetter/"* "${BITWARDEN_BASE}/bwdata/vaultlibre/"
+                        rm -rf "${BITWARDEN_BASE}/bwdata/bitbetter"
                 fi
         fi
 
@@ -138,13 +143,13 @@ compatibility_updates() {
 
 get_generate_license_script() {
 	# Fetch generate_license script
-	rm -f "${BITWARDEN_BASE}/generate_license.sh"
+	rm -f "${BITWARDEN_BASE}/vl_generate_license.sh"
 
 	if [ "${BUILD}" ]; then
-#		curl --silent --retry 3 "https://raw.githubusercontent.com/${GITHUB}/${REPO}/${BRANCH}/generate_license_local.sh" -o "${BITWARDEN_BASE}/generate_license.sh" && chmod 0755 "${BITWARDEN_BASE}/generate_license.sh"
-		cp -f "${BITWARDEN_BASE}/${REPO}/.build/generate_license_local.sh" "${BITWARDEN_BASE}/generate_license.sh"
+#		curl --silent --retry 3 "https://raw.githubusercontent.com/${GITHUB}/${REPO}/${BRANCH}/vl_generate_license_local.sh" -o "${BITWARDEN_BASE}/vl_generate_license.sh" && chmod 0755 "${BITWARDEN_BASE}/vl_generate_license.sh"
+		cp -f "${BITWARDEN_BASE}/${REPO}/.build/vl_generate_license_local.sh" "${BITWARDEN_BASE}/vl_generate_license.sh"
 	else
-		curl --silent --retry 3 "https://raw.githubusercontent.com/${GITHUB}/${REPO}/${BRANCH}/generate_license.sh" -o "${BITWARDEN_BASE}/generate_license.sh" && chmod 0755 "${BITWARDEN_BASE}/generate_license.sh"
+		curl --silent --retry 3 "https://raw.githubusercontent.com/${GITHUB}/${REPO}/${BRANCH}/vl_generate_license.sh" -o "${BITWARDEN_BASE}/vl_generate_license.sh" && chmod 0755 "${BITWARDEN_BASE}/vl_generate_license.sh"
 	fi
 }
 
@@ -279,7 +284,8 @@ recreate_override() {
 		        echo "    image: vaultlibre/identity:$BW_VERSION"
 			else
 				if [ -f 'vaultlibre.custom.override.yml' ]; then
-					echo "$( cat vaultlibre.custom.override.yml )" | envsubst
+					# Read custom override and substitute exported variables used in override. i.e. ${DOCKERHUB}/${DOCKERHUBREPOAPI}:$BW_VERSION
+					envsubst < vaultlibre.custom.override.yml
 				else
 					echo "version: '3'"
 					echo ""
@@ -380,7 +386,7 @@ show_help() {
 	echo 'REGENCERTS    Force regeneratioin of certificates'
 	echo 'RECREATE      Force recreation of docker-compose.override.yml'
 	echo "RESTART       Force restart of Bitwarden if Bitwarden's update does not do a restart"
-	echo 'LOCALTIME		Force Bitwarden to write logs using localtime instead of UTC'
+	echo 'LOCALTIME     Force Bitwarden to write logs using localtime instead of UTC'
 	echo ''
 }
 

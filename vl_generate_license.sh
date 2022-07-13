@@ -6,7 +6,7 @@ DOCKERHUB="ayitaka"
 DOCKERHUBREPOLICENSEGEN="vaultlibre-licensegen"
 
 if [ -e "${PWD}/bwdata/env/global.override.env" ]; then
-        SERVER_INSTALLATION_ID=$( grep 'globalSettings__installation__id=' $PWD/bwdata/env/global.override.env | awk -F"=" '{print $2}' )
+        SERVER_INSTALLATION_ID=$( grep 'globalSettings__installation__id=' "$PWD/bwdata/env/global.override.env" | awk -F"=" '{print $2}' )
 else
         echo "Unable to get globalSettings__installation__id from ${PWD}/bwdata/env/global.override.env. Aborting."
         exit 1
@@ -16,7 +16,7 @@ TYPE=''
 NAME=''
 EMAIL=''
 GUID=''
-BUISNESS_NAME=''
+BUSINESS_NAME=''
 
 if [ "${1,,}" == "help" ] || [ "${1,,}" == "--help" ] || [ "${1,,}" == "-h" ]; then
         echo ""
@@ -27,14 +27,14 @@ if [ "${1,,}" == "help" ] || [ "${1,,}" == "--help" ] || [ "${1,,}" == "-h" ]; t
         echo "https://github.com/h44z/BitBetter"
         echo ""
         echo "To enter interactive mode:"
-        echo "     generate_license.sh"
+        echo "     vl_generate_license.sh"
         echo ""
         echo "To use command-line:"
-        echo "     generate_license.sh user USERS_NAME EMAIL USERS_GUID"
-        echo "     generate_license.sh org ORGS_NAME EMAIL BUSINESS_NAME"
+        echo "     vl_generate_license.sh user USERS_NAME EMAIL USERS_GUID"
+        echo "     vl_generate_license.sh org ORGS_NAME EMAIL BUSINESS_NAME"
         echo ""
-        echo "Example: generate_license.sh user SomeUser someuser@example.com 12345678-1234-1234-1234-123456789012"
-        echo 'Example: generate_license.sh org "My Organization Display Name" admin@mybusinesscompany.com "My Company Inc."'
+        echo "Example: vl_generate_license.sh user SomeUser someuser@example.com 12345678-1234-1234-1234-123456789012"
+        echo 'Example: vl_generate_license.sh org "My Organization Display Name" admin@mybusinesscompany.com "My Company Inc."'
         echo ""
         exit
 fi
@@ -106,4 +106,4 @@ if [ "${TYPE}" == "org" ]; then
 fi
 
 docker pull ${DOCKERHUB}/${DOCKERHUBREPOLICENSEGEN}:latest
-docker run -it --rm -v $PWD/bwdata/vaultlibre/cert.pfx:/cert.pfx ${DOCKERHUB}/${DOCKERHUBREPOLICENSEGEN}:latest "${TYPE}" "${NAME}" "${EMAIL}" "${GUID}" "${BUSINESS_NAME}"
+docker run -it --rm -v "$PWD/bwdata/vaultlibre/cert.pfx:/cert.pfx" "${DOCKERHUB}/${DOCKERHUBREPOLICENSEGEN}:latest" "${TYPE}" "${NAME}" "${EMAIL}" "${GUID}" "${BUSINESS_NAME}"
