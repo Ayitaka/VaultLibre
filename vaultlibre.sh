@@ -57,7 +57,7 @@ initilize() {
 
 	BW_VERSION=$(curl -sL https://raw.githubusercontent.com/bitwarden/self-host/master/version.json | jq -r ".versions.coreVersion")
 	export BW_VERSION
-    VL_VERSION=$(curl -sL https://raw.githubusercontent.com/Ayitaka/VaultLibre/master/versions.json | jq -r ".versions.Bitwarden.coreVersion")
+	VL_VERSION=$(curl -sL https://raw.githubusercontent.com/Ayitaka/VaultLibre/master/versions.json | jq -r ".versions.Bitwarden.coreVersion")
 	export VL_VERSION
 
 	# Run main function
