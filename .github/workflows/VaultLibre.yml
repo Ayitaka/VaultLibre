@@ -35,7 +35,7 @@ jobs:
         run: |
           BITWARDEN_CORE_VERSION=$(curl -sL https://raw.githubusercontent.com/bitwarden/self-host/master/version.json | jq -r ".versions.coreVersion")
           VAULTLIBRE_CORE_VERSION=$(cat versions.json | jq -r '.versions.Bitwarden.coreVersion')
-          VAULTLIBRE_STEP_VERSION=$(cat versions.json | jq -r '.versions.VaultLibre.stepVersion')
+          VAULTLIBRE_REVISION=$(cat versions.json | jq -r '.versions.VaultLibre.revision')
           
           if [ $BITWARDEN_CORE_VERSION != $VAULTLIBRE_CORE_VERSION ]; then
             NEWER_VERSION=true
@@ -53,7 +53,6 @@ jobs:
     ## || github.event_name == 'push' 
     env:
       BITWARDEN_CORE_VERSION: ${{ needs.check_version.outputs.bitwarden_core_version }}
-      STEPVERSION: 0
       MESSAGE: "Update"
       
     outputs:
@@ -92,25 +91,41 @@ jobs:
           echo ${DOCKER_HUB}/${DOCKER_HUB_REPO_API}:${BITWARDEN_CORE_VERSION} Deployed
           echo ${DOCKER_HUB}/${DOCKER_HUB_REPO_IDENTITY}:${BITWARDEN_CORE_VERSION} Deployed
 
-      - name: Save Bitwarden/Step Version Numbers
+      - name: Save Bitwarden/VaultLibre Version Numbers
         id: set_version
         run: |
           VAULTLIBRE_CORE_VERSION=$(cat versions.json | jq -r '.versions.Bitwarden.coreVersion')
-          VAULTLIBRE_STEP_VERSION=$(cat versions.json | jq -r '.versions.VaultLibre.stepVersion')
+          VAULTLIBRE_REVISION=$(cat versions.json | jq -r '.versions.VaultLibre.revision')
+          VAULTLIBRE_SCRIPT_VERSION=$(cat versions.json | jq -r '.versions.VaultLibre.scriptVersion')
+          VAULTLIBRE_CURRENT_SCRIPT_VERSION=$(sed -r -n "s/SCRIPT_VERSION=\"([0-9]+\.[0-9]+\.[0-9]+)\"/\1/p" vaultlibre.sh)
+
+          ## Two ways to split the script version into it's separate parts for bumping major, minor, revision, etc.
+          #oIFS="$IFS"; IFS='.'; declare -a arrVAULTLIBRE_SCRIPT_VERSION_SPLIT=($VAULTLIBRE_SCRIPT_VERSION); IFS="$oIFS"; unset oIFS;
+          ## This one only works on newer versions of bash
+          #IFS=\; read -a arrVAULTLIBRE_SCRIPT_VERSION_SPLIT <<<"$VAULTLIBRE_SCRIPT_VERSION"
+          ## Another way using the cut command
+          #VAULTLIBRE_SCRIPT_VERSION_MAJOR=$(echo "$VAULTLIBRE_SCRIPT_VERSION" | cut -d "." -f 1)
+          #VAULTLIBRE_SCRIPT_VERSION_MINOR=$(echo "$VAULTLIBRE_SCRIPT_VERSION" | cut -d "." -f 2)
+          #VAULTLIBRE_SCRIPT_VERSION_REVISION=$(echo "$VAULTLIBRE_SCRIPT_VERSION" | cut -d "." -f 3)
 
           if [ ${VAULTLIBRE_CORE_VERSION} == ${BITWARDEN_CORE_VERSION} ]; then
-            STEPVERSION=$(( ${VAULTLIBRE_STEP_VERSION} + 1 ))
-            MESSAGE="VaultLibre Step Version Update"
+            VAULTLIBRE_REVISION=$(( ${VAULTLIBRE_REVISION} + 1 ))
+            MESSAGE="VaultLibre Revision Update"
           else
-            STEPVERSION=0
+            VAULTLIBRE_REVISION=0
             MESSAGE="Bitwarden Core Version Update"
           fi
 
           echo "MESSAGE=${MESSAGE}" >> $GITHUB_ENV
 
-          VAULTLIBRE_VERSION="${BITWARDEN_CORE_VERSION}.${STEPVERSION}"
+          VAULTLIBRE_VERSION="${BITWARDEN_CORE_VERSION}.${VAULTLIBRE_REVISION}"
           
-          jq -n --arg coreversion "${BITWARDEN_CORE_VERSION}" --arg stepversion "${STEPVERSION}" --arg vaultlibreversion "${VAULTLIBRE_VERSION}" '{versions: {Bitwarden: {coreVersion: $coreversion}, VaultLibre: {stepVersion: $stepversion, fullVersion: $vaultlibreversion}}}' > versions.json
+          #jq -n --arg coreversion "${BITWARDEN_CORE_VERSION}" --arg stepversion "${VAULTLIBRE_STEP_VERSION}" --arg vaultlibreversion "${VAULTLIBRE_VERSION}" '{versions: {Bitwarden: {coreVersion: $coreversion}, VaultLibre: {stepVersion: $stepversion, fullVersion: $vaultlibreversion}}}' > versions.json
+
+          contents="$(jq --arg coreversion "${BITWARDEN_CORE_VERSION}" '.versions.Bitwarden.coreVersion = $coreversion' versions.json)" && echo -E "${contents}" > versions.json
+          contents="$(jq --arg revision "${VAULTLIBRE_REVISION}" '.versions.VaultLibre.revision = $revision' versions.json)" && echo -E "${contents}" > versions.json
+          contents="$(jq --arg vaultlibreversion "${VAULTLIBRE_VERSION}" '.versions.VaultLibre.fullVersion = $vaultlibreversion' versions.json)" && echo -E "${contents}" > versions.json
+          contents="$(jq --arg scriptversion "${VAULTLIBRE_CURRENT_SCRIPT_VERSION}" '.versions.VaultLibre.scriptVersion = $scriptversion' versions.json)" && echo -E "${contents}" > versions.json
 
           echo "##[set-output name=vaultlibre_version;]$VAULTLIBRE_VERSION"
           echo "##[set-output name=release_note;]$MESSAGE"
@@ -157,6 +172,12 @@ jobs:
           docker tag ${DOCKER_HUB}/${DOCKER_HUB_REPO_LICENSEGEN} ${DOCKER_HUB}/${DOCKER_HUB_REPO_LICENSEGEN}:latest
           docker push ${DOCKER_HUB}/${DOCKER_HUB_REPO_LICENSEGEN}:latest
           echo ${DOCKER_HUB}/${DOCKER_HUB_REPO_LICENSEGEN}:latest Deployed
+
+      - name: Deploy Tag
+        run: |
+          docker tag ${DOCKER_HUB}/${DOCKER_HUB_REPO_LICENSEGEN} ${DOCKER_HUB}/${DOCKER_HUB_REPO_LICENSEGEN}:${BITWARDEN_CORE_VERSION}
+          docker push ${DOCKER_HUB}/${DOCKER_HUB_REPO_LICENSEGEN}:${BITWARDEN_CORE_VERSION}
+          echo ${DOCKER_HUB}/${DOCKER_HUB_REPO_LICENSEGEN}:${BITWARDEN_CORE_VERSION} Deployed
 
   release:
     name: Create GitHub Release
