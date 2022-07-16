@@ -5,7 +5,9 @@
     },
     "VaultLibre": {
       "stepVersion": "2",
-      "fullVersion": "2022.6.2.2"
+      "fullVersion": "2022.6.2.1",
+      "revision": "1",
+      "scriptVersion": "1.1.0"
     }
   }
 }
