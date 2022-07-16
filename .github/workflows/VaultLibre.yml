@@ -154,6 +154,9 @@ jobs:
     needs: [check_version, build_vaultlibre]
     if: ${{ needs.check_version.outputs.newer_version == 'true' || github.event_name == 'workflow_dispatch' }}
     ## || github.event_name == 'push' 
+    env:
+      BITWARDEN_CORE_VERSION: ${{ needs.check_version.outputs.bitwarden_core_version }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
