@@ -3,12 +3,13 @@
 # VaultLibre
 
 VaultLibre is a tool to modify Bitwarden's core dll to allow generating custom User and Organization licenses. 
+
 **(Note: You must have an existing installation of Bitwarden for VaultLibre to modify.)**
 
 VaultLibre is based on the project <a href="https://github.com/jakeswenson/BitBetter">BitBetter</a>, with a number of key differences:
-* VaultLibre builds the docker images automatically whenever there is an update to Bitwarden and makes them available via DockerHub
-* VaultLibre can be used with the publically available docker images or built yourself from src to run locally
-* VaultLibre has a script to handle installing (or building) and updating with options to handle almost any use-case
+* VaultLibre can be used with publically available docker images or built yourself from src to run locally
+* VaultLibre updates the docker images whenever there is an update to Bitwarden and makes them available via DockerHub
+* VaultLibre has a script to handle installing (or building) and updating, with options to handle almost any use-case
 * You can clone the repo, change a few variables, and set it up on your own Github/DockerHub
 
 Use VaultLibre at your own risk. Be sure to make backups of the bwdata folder before install VaultLibre or upgrading.
