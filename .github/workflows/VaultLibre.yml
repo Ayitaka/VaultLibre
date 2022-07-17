@@ -58,8 +58,6 @@ jobs:
     outputs:
       vaultlibre_version: ${{ steps.set_version.outputs.vaultlibre_version }}
       release_note: ${{ steps.set_version.outputs.release_note }}
-      identity_sha256: ${{ steps.set_version.outputs.identity_sha256 }}
-      api_sha256: ${{ steps.set_version.outputs.api_sha256 }}
 
     steps:
       - name: Checkout
@@ -135,8 +133,14 @@ jobs:
           IDENTITY_SHA256="$( docker inspect --format='{{index .RepoDigests 0}}' ${DOCKER_HUB}/${DOCKER_HUB_REPO_IDENTITY}:${BITWARDEN_CORE_VERSION} )"
           API_SHA256="$( docker inspect --format='{{index .RepoDigests 0}}' ${DOCKER_HUB}/${DOCKER_HUB_REPO_API}:${BITWARDEN_CORE_VERSION} )"
 
-          echo "##[set-output name=identity_sha256;]$IDENTITY_SHA256"
-          echo "##[set-output name=api_sha256;]$API_SHA256"
+          echo "${IDENTITY_SHA256}" > sha256.txt
+          echo "${API_SHA256}" >> sha256.txt
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+            name: sha256
+            path: sha256.txt
 
 #      - name: Commit changes
 #        uses: EndBug/add-and-commit@v4
@@ -165,9 +169,6 @@ jobs:
     env:
       BITWARDEN_CORE_VERSION: ${{ needs.check_version.outputs.bitwarden_core_version }}
 
-    outputs:
-      licensegen_sha256: ${{ steps.get_sha256.outputs.licensegen_sha256 }}
-
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -193,12 +194,22 @@ jobs:
           docker push ${DOCKER_HUB}/${DOCKER_HUB_REPO_LICENSEGEN}:${BITWARDEN_CORE_VERSION}
           echo ${DOCKER_HUB}/${DOCKER_HUB_REPO_LICENSEGEN}:${BITWARDEN_CORE_VERSION} Deployed
 
+      - uses: actions/download-artifact@v3
+        with:
+          name: sha256.txt
+
       - name: Get Sha256
         id: get_sha256
         run: |
           LICENSEGEN_SHA256="$( docker inspect --format='{{index .RepoDigests 0}}' ${DOCKER_HUB}/${DOCKER_HUB_REPO_LICENSEGEN}:${BITWARDEN_CORE_VERSION} )"
 
-          echo "##[set-output name=licensegen_sha256;]$LICENSEGEN_SHA256"
+          echo "${LICENSEGEN_SHA256}" >> sha256.txt
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+            name: sha256
+            path: sha256.txt
 
   release:
     name: Create GitHub Release
@@ -209,19 +220,14 @@ jobs:
     env:
       VAULTLIBRE_VERSION: ${{ needs.build_vaultlibre.outputs.vaultlibre_version }}
       RELEASE_NOTE: ${{ needs.build_vaultlibre.outputs.release_note }}
-      IDENTITY_SHA256: ${{ needs.build_vaultlibre.outputs.identity_sha256 }}
-      API_SHA256: ${{ needs.build_vaultlibre.outputs.api_sha256 }}
-      LICENSEGEN_SHA256: ${{ needs.build_license_generator.outputs.licensegen_sha256 }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Save Docker Digest SHA256s
-        run: |
-            echo "${IDENTITY_SHA256}" > sha256.txt
-            echo "${API_SHA256}" >> sha256.txt
-            echo "${LICENSEGEN_SHA256}" >> sha256.txt
+      - uses: actions/download-artifact@v3
+        with:
+          name: sha256.txt
 
       - name: Create Release
         uses: ncipollo/release-action@95215a3cb6e6a1908b3c44e00b4fdb15548b1e09
