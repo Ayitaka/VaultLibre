@@ -19,12 +19,14 @@ Credit to:
     + [Installing VaultLibre](#installing-vaultlibre)
     + [Updating VaultLibre and Bitwarden](#updating-vaultlibre-and-bitwarden)
     + [Generating Signed Licenses](#generating-signed-licenses)
+    + [Adding Crontab For Updating](#adding-crontab-for-updating)
 2. [Script Options](#script-options)
 3. [Advanced](#advanced)
     + [Building VaultLibre](#building-vaultlibre)
     + [Updating Built VaultLibre and Bitwarden](#updating-built--vaultlibre-and-bitwarden)
     + [Manually Generating Certificate](#manually-generating-certificate)
     + [Manually Generating Signed Licenses](#manually-generating-signed-licenses)
+    + [Using Custom docker-compose.override.yml](#using-a-custom-docker-compose.override.yml)
 4. [FAQ](#faq-questions-you-might-have-)
 5. [Footnotes](#footnotes)
 
@@ -82,7 +84,7 @@ Example: vl_generate_license.sh org "My Organization Display Name" admin@mybusin
 ./vl_generate_license.sh
 ```
 
-## Adding crontab to update
+## Adding crontab for updating
 ```
 #### VaultLibre Sun. Tues, Wed, Thur, Fri, Sat
 22 2 * * 0,2-6 cd ${HOME} && ./vaultlibre.sh auto update recreate localtime >/dev/null 
