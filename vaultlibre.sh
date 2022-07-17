@@ -329,7 +329,7 @@ update_bitwarden() {
 
 	./bitwarden.sh updateself
 
-	# Patch run.sh to add --no-random-sleep-on-renew to skip wait time when renewing LetsEncrypt cert
+	# Patch newly downloaded bitwarden.sh to patch run.sh when it gets downloaded to add --no-random-sleep-on-renew to skip wait time when renewing LetsEncrypt cert
 	sed -i -e '/^    curl -L -s -o $SCRIPTS_DIR\/run.sh $RUN_SCRIPT_URL/a\' -e "    sed -i \'s\/ renew --logs-dir\/ renew --no-random-sleep-on-renew --logs-dir\/\' \$SCRIPTS_DIR\/run\.sh" "${BITWARDEN_BASE}/bitwarden.sh"
 
 	if [ "${BUILD}" ]; then
