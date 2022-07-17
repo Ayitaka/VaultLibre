@@ -26,7 +26,7 @@ Credit to:
     + [Updating Built VaultLibre and Bitwarden](#updating-built--vaultlibre-and-bitwarden)
     + [Manually Generating Certificate](#manually-generating-certificate)
     + [Manually Generating Signed Licenses](#manually-generating-signed-licenses)
-    + [Using Custom docker-compose.override.yml](#using-a-custom-docker-compose.override.yml)
+    + [Using Custom Docker Override](#using-custom-docker-override)
 4. [FAQ](#faq-questions-you-might-have-)
 5. [Footnotes](#footnotes)
 
@@ -255,7 +255,7 @@ Additional, instead of interactive mode, you can also pass the parameters direct
 ./src/licenseGen/run.sh /Absolute/Path/To/VaultLibre/.keys/cert.pfx user "Name" "EMail" "User-GUID"
 ./src/licenseGen/run.sh /Absolute/Path/To/VaultLibre/.keys/cert.pfx org "Name" "EMail" "Install-ID used to install the server"
 ```
-## Using a custom docker-compose.override.yml
+## Using a Custom Docker Override
 
 If you want to use a custom docker-compose.override.yml you can do so by creating a file named vaultlibre.custom.override.yml and placing it in the same directory as the vaultlibre.sh script.
 
