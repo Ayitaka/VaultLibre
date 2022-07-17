@@ -82,6 +82,13 @@ Example: vl_generate_license.sh org "My Organization Display Name" admin@mybusin
 ./vl_generate_license.sh
 ```
 
+## Adding crontab to update
+```#### VaultLibre Sun. Tues, Wed, Thur, Fri, Sat
+22 2 * * 0,2-6 cd ${HOME} && ./vaultlibre.sh auto update recreate localtime >/dev/null 
+#### VaultLibre Mon force restart to allow updating LetsEncrypt if necessary
+22 2 * * 1 cd ${HOME} && ./vaultlibre.sh auto update recreate localtime restart >/dev/null
+```
+
 # Script Options
 
 ### Syntax
