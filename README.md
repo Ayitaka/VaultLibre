@@ -10,13 +10,13 @@ VaultLibre is based on the project <a href="https://github.com/jakeswenson/BitBe
 * VaultLibre can be used with publically available docker images or built yourself from src to run locally
 * VaultLibre updates the docker images whenever there is an update to Bitwarden and makes them available via DockerHub
 * VaultLibre has a script to handle installing (or building) and updating, with options to handle almost any use-case
-* You can clone the repo, change a few variables, and set it up on your own Github/DockerHub
+* You can use the script to easily generate User and Organization licenses
 
 **Use VaultLibre at your own risk. Be sure to make a backup of the bwdata folder before installing VaultLibre or upgrading.**
 
 Credit to:
 * <a href="https://github.com/jakeswenson/BitBetter">jakeswenson</a> for the original BitBetter project
-* <a href="https://github.com/h44z/BitBetter">h44z</a> for many invaluable contributions
+* <a href="https://github.com/h44z/BitBetter">h44z</a> for all their contributions to the original project
 * <a href="https://github.com/alexyao2015/BitBetter">alexyao2015</a> for creating the starting point for adding docker images
 
 # Table of Contents
@@ -24,8 +24,8 @@ Credit to:
     + [Dependencies](#dependencies)
     + [Installing VaultLibre](#installing-vaultlibre)
     + [Updating VaultLibre and Bitwarden](#updating-vaultlibre-and-bitwarden)
-    + [Generating Signed Licenses](#generating-signed-licenses)
     + [Adding Crontab For Updating](#adding-crontab-for-updating)
+    + [Generating Signed Licenses](#generating-signed-licenses)
 2. [Script Options](#script-options)
 3. [Advanced](#advanced)
     + [Building VaultLibre](#building-vaultlibre)
@@ -43,12 +43,12 @@ The following instructions are for unix-based systems (Linux, BSD, macOS). It is
 * docker
 * docker-compose
 * curl
-* openssl (probably already installed on most Linux or WSL systems, any version should work)
+* openssl
 * jq
-* Bitwarden (tested with 1.37.2, might work on lower versions)
+* Bitwarden Server
 
 ## Installing VaultLibre
-The easiest way to install VaultLibre is to use the vaultlibre script which utilizes the public VaultLibre docker images. These docker images are compiled automatically anytime a new version of Bitwarden is released or when changes are made to VaultLibre.
+The easiest way to install VaultLibre is to use the vaultlibre.sh script to utilize the public VaultLibre docker images. These docker images are compiled automatically anytime a new version of Bitwarden is released or when changes are made to VaultLibre.
 
 #### Run the install script:
 
@@ -63,6 +63,14 @@ For available options, see [Script Options](#script-options)
 #### Using the vaultlibre script, you can update both VaultLibre and Bitwarden:
 ```bash
 ./vaultlibre.sh update auto
+```
+
+## Adding Crontab For Updating
+```bash
+#### VaultLibre Sun. Tues, Wed, Thur, Fri, Sat
+22 2 * * 0,2-6 cd ${HOME} && ./vaultlibre.sh auto update recreate localtime >/dev/null 
+#### VaultLibre Mon force restart to allow updating LetsEncrypt if necessary
+22 2 * * 1 cd ${HOME} && ./vaultlibre.sh auto update recreate localtime restart >/dev/null
 ```
 
 ## Generating Signed Licenses
@@ -90,15 +98,6 @@ Example: vl_generate_license.sh org "My Organization Display Name" admin@mybusin
 ```bash
 ./vl_generate_license.sh
 ```
-
-## Adding crontab for updating
-```
-#### VaultLibre Sun. Tues, Wed, Thur, Fri, Sat
-22 2 * * 0,2-6 cd ${HOME} && ./vaultlibre.sh auto update recreate localtime >/dev/null 
-#### VaultLibre Mon force restart to allow updating LetsEncrypt if necessary
-22 2 * * 1 cd ${HOME} && ./vaultlibre.sh auto update recreate localtime restart >/dev/null
-```
-
 # Script Options
 
 ### Syntax
