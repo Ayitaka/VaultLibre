@@ -26,7 +26,7 @@ Credit to:
     + [Updating Built VaultLibre and Bitwarden](#updating-built--vaultlibre-and-bitwarden)
     + [Manually Generating Certificate](#manually-generating-certificate)
     + [Manually Generating Signed Licenses](#manually-generating-signed-licenses)
-    + [Using Custom Docker Override](#using-custom-docker-override)
+    + [Using A Custom Docker Override](#using-a-custom-docker-override)
 4. [FAQ](#faq-questions-you-might-have-)
 5. [Footnotes](#footnotes)
 
