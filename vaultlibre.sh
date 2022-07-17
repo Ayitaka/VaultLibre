@@ -329,9 +329,6 @@ update_bitwarden() {
 
 	./bitwarden.sh updateself
 
-	#curl --silent --retry 3 "https://raw.githubusercontent.com/${GITHUB}/${REPO}/${BRANCH}/extra/scripts/patch-run.sh" -o "${BITWARDEN_BASE}/bwdata/scripts/patch-run.sh" && chmod u+x "${BITWARDEN_BASE}/bwdata/scripts/patch-run.sh"
-	#sed -e '/^    curl -L -s -o $SCRIPTS_DIR\/run.sh $RUN_SCRIPT_URL/a\' -e '    $SCRIPTS_DIR\/patch-run.sh' bitwarden.sh
-
 	# Patch run.sh to add --no-random-sleep-on-renew to skip wait time when renewing LetsEncrypt cert
 	sed -i -e '/^    curl -L -s -o $SCRIPTS_DIR\/run.sh $RUN_SCRIPT_URL/a\' -e "    sed -i \'s\/ renew --logs-dir\/ renew --no-random-sleep-on-renew --logs-dir\/\' \$SCRIPTS_DIR\/run\.sh" "${BITWARDEN_BASE}/bitwarden.sh"
 
