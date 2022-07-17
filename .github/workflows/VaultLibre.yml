@@ -139,7 +139,7 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
-            name: sha256
+            name: sha256.txt
             path: sha256.txt
 
 #      - name: Commit changes
@@ -197,7 +197,7 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: sha256.txt
-
+          
       - name: Get Sha256
         id: get_sha256
         run: |
@@ -208,7 +208,7 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
-            name: sha256
+            name: sha256.txt
             path: sha256.txt
 
   release:
