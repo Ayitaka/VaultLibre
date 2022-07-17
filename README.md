@@ -2,16 +2,21 @@
 <a href="https://hub.docker.com/r/ayitaka/vaultlibre-api"><img alt="Docker Pulls" src="https://img.shields.io/docker/pulls/ayitaka/vaultlibre-api.svg"></a>
 # VaultLibre
 
-VaultLibre is a tool to modify Bitwarden's core dll to allow generating custom individual and organization licenses. **You must have an existing installation of Bitwarden for VaultLibre to modify.**
+VaultLibre is a tool to modify Bitwarden's core dll to allow generating custom User and Organization licenses. 
+**(Note: You must have an existing installation of Bitwarden for VaultLibre to modify.)**
 
-Please see the FAQ below for details on why this software was created.
+VaultLibre is based on the project <a href="https://github.com/jakeswenson/BitBetter">BitBetter</a>, with a number of key differences:
+* VaultLibre builds the docker images automatically whenever there is an update to Bitwarden and makes them available via DockerHub
+* VaultLibre can be used with the publically available docker images or built yourself from src to run locally
+* VaultLibre has a script to handle installing (or building) and updating with options to handle almost any use-case
+* You can clone the repo, change a few variables, and set it up on your own Github/DockerHub
 
 Use VaultLibre at your own risk. Be sure to make backups of the bwdata folder before install VaultLibre or upgrading.
 
 Credit to:
-* https://github.com/jakeswenson/BitBetter for the main project
-* https://github.com/h44z/BitBetter for many invaluable contributions
-* https://github.com/alexyao2015/BitBetter for creating the starting point for adding docker images
+* <a href="https://github.com/jakeswenson/BitBetter">jakeswenson</a> for the original BitBetter project
+* <a href="https://github.com/h44z/BitBetter">h44z</a> for many invaluable contributions
+* <a href="https://github.com/alexyao2015/BitBetter">alexyao2015</a> for creating the starting point for adding docker images
 
 # Table of Contents
 1. [Getting Started](#getting-started)
@@ -38,6 +43,7 @@ The following instructions are for unix-based systems (Linux, BSD, macOS). It is
 * docker-compose
 * curl
 * openssl (probably already installed on most Linux or WSL systems, any version should work)
+* jq
 * Bitwarden (tested with 1.37.2, might work on lower versions)
 
 ## Installing VaultLibre
