@@ -257,7 +257,7 @@ Additional, instead of interactive mode, you can also pass the parameters direct
 ```
 ## Using a Custom Docker Override
 
-If you want to use a custom docker-compose.override.yml you can do so by creating a file named vaultlibre.custom.override.yml and placing it in the same directory as the vaultlibre.sh script.
+If you want to use a custom docker-compose.override.yml you can do so by creating a file named vl.custom.override.yml and placing it in the same directory as the vaultlibre.sh script.
 
 Following is an example with the barest minimum of requirements for the custom file's contents:
 
