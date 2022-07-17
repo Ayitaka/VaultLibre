@@ -12,7 +12,7 @@ VaultLibre is based on the project <a href="https://github.com/jakeswenson/BitBe
 * VaultLibre has a script to handle installing (or building) and updating, with options to handle almost any use-case
 * You can clone the repo, change a few variables, and set it up on your own Github/DockerHub
 
-Use VaultLibre at your own risk. Be sure to make backups of the bwdata folder before install VaultLibre or upgrading.
+**Use VaultLibre at your own risk. Be sure to make a backup(s) of the bwdata folder before installing VaultLibre or upgrading.**
 
 Credit to:
 * <a href="https://github.com/jakeswenson/BitBetter">jakeswenson</a> for the original BitBetter project
