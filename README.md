@@ -24,7 +24,6 @@ Credit to:
     + [Dependencies](#dependencies)
     + [Installing VaultLibre](#installing-vaultlibre)
     + [Updating VaultLibre and Bitwarden](#updating-vaultlibre-and-bitwarden)
-    + [Adding Crontab For Updating](#adding-crontab-for-updating)
     + [Generating Signed Licenses](#generating-signed-licenses)
 2. [Script Options](#script-options)
 3. [Advanced](#advanced)
@@ -65,12 +64,12 @@ For available options, see [Script Options](#script-options)
 ./vaultlibre.sh update auto
 ```
 
-## Adding Crontab For Updating
+#### Adding a crontab for updating
 ```bash
-#### VaultLibre Sun. Tues, Wed, Thur, Fri, Sat
-22 2 * * 0,2-6 cd ${HOME} && ./vaultlibre.sh auto update recreate localtime >/dev/null 
-#### VaultLibre Mon force restart to allow updating LetsEncrypt if necessary
-22 2 * * 1 cd ${HOME} && ./vaultlibre.sh auto update recreate localtime restart >/dev/null
+#### VaultLibre Mon-Sat @ 2:22am
+22 2 * * 1-6 cd ${HOME} && ./vaultlibre.sh auto update recreate localtime >/dev/null 
+#### VaultLibre Sun @ 2:22am force restart to allow updating LetsEncrypt if necessary
+22 2 * * 0 cd ${HOME} && ./vaultlibre.sh auto update recreate localtime restart >/dev/null
 ```
 
 ## Generating Signed Licenses
