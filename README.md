@@ -80,7 +80,10 @@ Licenses are used for enabling certain features. There are licenses for Users an
 ./vaultlibre.sh generate_license user USERS_NAME EMAIL USERS_GUID
 ```
 
-Example: vaultlibre.sh generate_license user SomeUser someuser@example.com 12345678-1234-1234-1234-123456789012
+**Example**:
+```bash
+./vaultlibre.sh generate_license user SomeUser someuser@example.com 12345678-1234-1234-1234-123456789012
+```
 
 (NOTE: In order to generate a **USER** license, you'll need to get a **user's GUID**. This can be retrieved most easily through the Bitwarden [Admin Portal](https://help.bitwarden.com/article/admin-portal/)).
 
@@ -91,13 +94,16 @@ Example: vaultlibre.sh generate_license user SomeUser someuser@example.com 12345
 ./vaultlibre.sh generate_license org ORGS_NAME EMAIL BUSINESS_NAME
 ```
 
-Example: vaultlibre.sh generate_license org "My Organization Display Name" admin@mybusinesscompany.com "My Company Inc."
+**Example**:
+```bash
+./vaultlibre.sh generate_license org "My Organization Display Name" admin@mybusinesscompany.com "My Company Inc."
+```
 
 ---
 
 #### Interactive Mode (will prompt you for required input):
 ```bash
-./vl_generate_license.sh
+./vaultlibre.sh generate_license
 ```
 # Script Options
 
