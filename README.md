@@ -73,23 +73,25 @@ For available options, see [Script Options](#script-options)
 ```
 
 ## Generating Signed Licenses
-Licenses are used for enabling certain features. There are licenses for Users and for Organizations. When you install VaultLibre, a script called vl_generate_license.sh is placed in the installation directory to make generating licenses easy.
+Licenses are used for enabling certain features. There are licenses for Users and for Organizations. You can use the vaultlibre.sh script to generate licenses, or the vl_generate_license.sh script. Once you have generated a license, copy it and save it in a txt file. Then use the saved file to upload the license in the settings when you are logged into the applicable account.
 
 #### For a user:
 ```bash
-./vl_generate_license.sh user USERS_NAME EMAIL USERS_GUID
+./vaultlibre.sh generate_license user USERS_NAME EMAIL USERS_GUID
 ```
 
-Example: vl_generate_license.sh user SomeUser someuser@example.com 12345678-1234-1234-1234-123456789012
+Example: vaultlibre.sh generate_license user SomeUser someuser@example.com 12345678-1234-1234-1234-123456789012
+
+(NOTE: In order to generate a **USER** license, you'll need to get a **user's GUID**. This can be retrieved most easily through the Bitwarden [Admin Portal](https://help.bitwarden.com/article/admin-portal/)).
 
 ---
 
 #### For an Organization:
 ```bash
-./vl_generate_license.sh org ORGS_NAME EMAIL BUSINESS_NAME
+./vaultlibre.sh generate_license org ORGS_NAME EMAIL BUSINESS_NAME
 ```
 
-Example: vl_generate_license.sh org "My Organization Display Name" admin@mybusinesscompany.com "My Company Inc."
+Example: vaultlibre.sh generate_license org "My Organization Display Name" admin@mybusinesscompany.com "My Company Inc."
 
 ---
 
@@ -280,17 +282,7 @@ services:
       - ../vaultlibre/cert.cert:/newLicensing.cer
 ```
 
-# FAQ: Questions you might have.
-
-## Why build a license generator for open source software?
-
-We agree that Bitwarden is great. If we didn't care about it then we wouldn't be doing this. We believe that if a user wants to host Bitwarden themselves, in their house, for their family to use amd with the ability to share access, they would still have to pay a **monthly** enterprise organization fee. When hosting and maintaining the software yourself there is no need to pay for the level of service that an enterprise customer needs.
-
-Unfortunately, Bitwarden doesn't seem to have any method for receiving donations so we recommend making a one-time donation to your open source project of choice for each VaultLibre license you generate if you can afford to do so.
-
-## Shouldn't you have reached out to Bitwarden to ask them for alternative licensing structures?
-
-In the past we have done so but they were not focused on the type of customer that would want a one-time license and would be happy to sacrifice customer service. We believe the features that are currently behind this subscription paywall to be critical ones and believe they should be available to users who can't afford an enterprise payment structure. We'd even be happy to see a move towards a Gitlab-like model where premium features are rolled out *first* to the enterprise subscribers before being added to the fully free version.
+# FAQs:
 
 # Footnotes
 
