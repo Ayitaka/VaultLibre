@@ -7,7 +7,7 @@ WORKDIR /vaultlibre
 COPY ./src/vaultlibre /vaultlibre
 
 RUN set -e; set -x; \
-	dotnet add package Newtonsoft.Json --version 12.0.3 \
+	dotnet add package Newtonsoft.Json --version 13.0.1 \
 	&& dotnet restore \
 	&& dotnet publish
 
