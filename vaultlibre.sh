@@ -6,7 +6,7 @@
 # ./vaultlibre.sh install        [auto] [regencerts] [recreate]              - Install using images from Docker Hub
 # ./vaultlibre.sh install build  [auto] [regencerts] [recreate]              - Install/build from Github src
 #
-# ./vaultlibre.sh updat          [auto] [regencerts] [recreate] [restart]    - Update using images from Docker Hub
+# ./vaultlibre.sh update         [auto] [regencerts] [recreate] [restart]    - Update using images from Docker Hub
 # ./vaultlibre.sh update build   [auto] [regencerts] [recreate] [restart]    - Update from Github src
 # ./vaultlibre.sh update rebuild [auto] [regencerts] [recreate] [restart]    - Update/force rebuild from Github src
 #
