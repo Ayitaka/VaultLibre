@@ -330,6 +330,7 @@ update_bitwarden() {
 	./bitwarden.sh updateself
 
 	# Patch newly downloaded bitwarden.sh to patch run.sh when it gets downloaded to add --no-random-sleep-on-renew to skip wait time when renewing LetsEncrypt cert
+	# shellcheck disable=SC2016,SC1003,SC1117 # This line is searching for the literal strings and replacing them with the literal strings so single/double quotes are correct
 	sed -i -e '/^    curl -L -s -o $SCRIPTS_DIR\/run.sh $RUN_SCRIPT_URL/a\' -e "    sed -i \'s\/ renew --logs-dir\/ renew --no-random-sleep-on-renew --logs-dir\/\' \$SCRIPTS_DIR\/run\.sh" "${BITWARDEN_BASE}/bitwarden.sh"
 
 	if [ "${BUILD}" ]; then
