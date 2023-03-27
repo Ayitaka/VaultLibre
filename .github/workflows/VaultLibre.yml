@@ -43,8 +43,8 @@ jobs:
           else
             NEWER_VERSION=false          
           fi
-          echo "##[set-output name=newer_version;]$NEWER_VERSION"
-          echo "##[set-output name=bitwarden_core_version;]$BITWARDEN_CORE_VERSION"
+          echo "newer_version=$NEWER_VERSION" >> $GITHUB_OUTPUT
+          echo "bitwarden_core_version=$BITWARDEN_CORE_VERSION" >> $GITHUB_OUTPUT
 
   build_vaultlibre:
     name: Publish VaultLibre
@@ -129,8 +129,8 @@ jobs:
           contents="$(jq --arg vaultlibreversion "${VAULTLIBRE_VERSION}" '.versions.VaultLibre.fullVersion = $vaultlibreversion' versions.json)" && echo -E "${contents}" > versions.json
           contents="$(jq --arg scriptversion "${VAULTLIBRE_CURRENT_SCRIPT_VERSION}" '.versions.VaultLibre.scriptVersion = $scriptversion' versions.json)" && echo -E "${contents}" > versions.json
 
-          echo "##[set-output name=vaultlibre_version;]$VAULTLIBRE_VERSION"
-          echo "##[set-output name=release_note;]$MESSAGE"
+          echo "vaultlibre_version=$VAULTLIBRE_VERSION" >> $GITHUB_OUTPUT
+          echo "release_note=$MESSAGE" >> $GITHUB_OUTPUT
 
           IDENTITY_SHA256="$( docker inspect --format='{{index .RepoDigests 0}}' ${DOCKER_HUB}/${DOCKER_HUB_REPO_IDENTITY}:${BITWARDEN_CORE_VERSION} )"
           API_SHA256="$( docker inspect --format='{{index .RepoDigests 0}}' ${DOCKER_HUB}/${DOCKER_HUB_REPO_API}:${BITWARDEN_CORE_VERSION} )"
@@ -233,7 +233,7 @@ jobs:
           name: sha256.txt
 
       - name: Create Release
-        uses: ncipollo/release-action@58ae73b360456532aafd58ee170c045abbeaee37
+        uses: ncipollo/release-action@v1
         with:
           commit: ${{ github.sha }}
           tag: "v${{ needs.build_vaultlibre.outputs.vaultlibre_version }}"
