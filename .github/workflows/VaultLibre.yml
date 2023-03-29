@@ -60,6 +60,7 @@ jobs:
     outputs:
       vaultlibre_version: ${{ steps.set_version.outputs.vaultlibre_version }}
       release_note: ${{ steps.set_version.outputs.release_note }}
+      commit_hash: ${{ steps.set_commit_hash.outputs.commit_hash }}
 
     steps:
       - name: Checkout
@@ -161,6 +162,12 @@ jobs:
 
       - name: Push changes
         run: git push
+
+      - name: Set Commit Hash
+        id: set_commit_hash
+        run: |
+          COMMIT_HASH=$(git rev-parse HEAD)
+          echo "commit_hash=$COMMIT_HASH" >> $GITHUB_OUTPUT
         
   build_license_generator:
     name: Publish License Generator
@@ -223,6 +230,7 @@ jobs:
     env:
       VAULTLIBRE_VERSION: ${{ needs.build_vaultlibre.outputs.vaultlibre_version }}
       RELEASE_NOTE: ${{ needs.build_vaultlibre.outputs.release_note }}
+      COMMIT_HASH: ${{ needs.build_vaultlibre.outputs.commit_hash }}
 
     steps:
       - name: Checkout
@@ -235,7 +243,8 @@ jobs:
       - name: Create Release
         uses: ncipollo/release-action@v1
         with:
-          commit: ${{ github.sha }}
+          #commit: ${{ github.sha }}
+          commit: ${{ needs.build_vaultlibre.outputs.commit_hash }}
           tag: "v${{ needs.build_vaultlibre.outputs.vaultlibre_version }}"
           name: "Version ${{ needs.build_vaultlibre.outputs.vaultlibre_version }}"
           body: "${{ needs.build_vaultlibre.outputs.release_note }}"
