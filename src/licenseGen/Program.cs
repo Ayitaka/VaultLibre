@@ -316,6 +316,7 @@ namespace bitwardenSelfLicensor
                 type.GetProperty(name).SetValue(license, value);
             }
 
+			// From server/blob/master/src/Core/Models/Business/UserLicense.cs
             set("LicenseType", Enum.Parse(licenseTypeEnum, "User"));
             set("LicenseKey", string.IsNullOrWhiteSpace(key) ? Guid.NewGuid().ToString("n") : key);
             set("Id", userId);
@@ -351,6 +352,7 @@ namespace bitwardenSelfLicensor
                 type.GetProperty(name).SetValue(license, value);
             }
 
+			// From server/blob/master/src/Core/Models/Business/OrganizationLicense.cs
             set("Version", 10);
             set("LicenseType", Enum.Parse(licenseTypeEnum, "Organization"));
             set("LicenseKey", string.IsNullOrWhiteSpace(key) ? Guid.NewGuid().ToString("n") : key);
