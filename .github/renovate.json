@@ -4,5 +4,10 @@
     "config:base",
     ":dependencyDashboard",
     "helpers:pinGitHubActionDigests"
-  ]
+  ],
+  "force": {
+    "constraints": {
+      "dotnet": "6.0.413"
+    }
+  }
 }
