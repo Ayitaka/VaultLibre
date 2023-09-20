@@ -15,6 +15,7 @@
     "dockerfile",
     "docker-compose",
     "github-actions",
+    "npm",
     "nuget"
   ],
   "packageRules": [
@@ -49,3 +50,4 @@
       "dotnet": "6.0.413"
     }
   }
+}
