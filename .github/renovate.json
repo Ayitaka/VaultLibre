@@ -2,13 +2,45 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:base",
-//    ":dependencyDashboard",
-    "helpers:pinGitHubActionDigests"
+    ":combinePatchMinorReleases",
+    ":dependencyDashboard",
+    ":maintainLockFilesWeekly",
+    ":pinAllExceptPeerDependencies",
+    ":prConcurrentLimit10",
+    ":rebaseStalePrs",
+    "schedule:weekends",
+    ":separateMajorReleases"
+  ],
+  "enabledManagers": [
+    "dockerfile",
+    "docker-compose",
+    "github-actions",
+    "nuget"
   ],
   "packageRules": [
     {
+      "groupName": "dockerfile minor",
+      "matchManagers": ["dockerfile"],
+      "matchUpdateTypes": ["minor", "patch"]
+    },
+    {
+      "groupName": "docker-compose minor",
+      "matchManagers": ["docker-compose"],
+      "matchUpdateTypes": ["minor", "patch"]
+    },
+    {
       "groupName": "gh minor",
       "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["minor", "patch"]
+    },
+    {
+      "groupName": "npm minor",
+      "matchManagers": ["npm"],
+      "matchUpdateTypes": ["minor", "patch"]
+    },
+    {
+      "groupName": "nuget minor",
+      "matchManagers": ["nuget"],
       "matchUpdateTypes": ["minor", "patch"]
     }
   ],
@@ -17,4 +49,3 @@
       "dotnet": "6.0.413"
     }
   }
-}
