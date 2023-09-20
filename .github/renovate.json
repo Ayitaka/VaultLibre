@@ -5,6 +5,13 @@
 //    ":dependencyDashboard",
     "helpers:pinGitHubActionDigests"
   ],
+  "packageRules": [
+    {
+      "groupName": "gh minor",
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["minor", "patch"]
+    }
+  ],
   "force": {
     "constraints": {
       "dotnet": "6.0.413"
