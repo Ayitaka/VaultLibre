@@ -29,7 +29,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3
 
       - name: Get Latest Version
         id: check_version
@@ -64,7 +64,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3
         id: build_image
 
       - name: Build VaultLibre Images
@@ -140,7 +140,7 @@ jobs:
           echo "${API_SHA256}" >> sha256.txt
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3
         with:
             name: sha256.txt
             path: sha256.txt
@@ -181,7 +181,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3
         id: build_image
 
       - name: Build Image
@@ -204,7 +204,7 @@ jobs:
           docker push ${DOCKER_HUB}/${DOCKER_HUB_REPO_LICENSEGEN}:${BITWARDEN_CORE_VERSION}
           echo ${DOCKER_HUB}/${DOCKER_HUB_REPO_LICENSEGEN}:${BITWARDEN_CORE_VERSION} Deployed
 
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@9bc31d5ccc31df68ecc42ccf4149144866c47d8a # v3
         with:
           name: sha256.txt
           
@@ -216,7 +216,7 @@ jobs:
           echo "${LICENSEGEN_SHA256}" >> sha256.txt
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3
         with:
             name: sha256.txt
             path: sha256.txt
@@ -234,14 +234,14 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3
 
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@9bc31d5ccc31df68ecc42ccf4149144866c47d8a # v3
         with:
           name: sha256.txt
 
       - name: Create Release
-        uses: ncipollo/release-action@v1
+        uses: ncipollo/release-action@6c75be85e571768fa31b40abf38de58ba0397db5 # v1
         with:
           #commit: ${{ github.sha }}
           commit: ${{ needs.build_vaultlibre.outputs.commit_hash }}
