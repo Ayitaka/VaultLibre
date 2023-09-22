@@ -6,6 +6,7 @@
     ":dependencyDashboard",
     ":maintainLockFilesWeekly",
     ":pinAllExceptPeerDependencies",
+    "helpers:pinGitHubActionDigests",
     ":prConcurrentLimit10",
     ":rebaseStalePrs",
     "schedule:weekends",
