@@ -384,8 +384,8 @@ namespace bitwardenSelfLicensor
             set("Issued", DateTime.UtcNow);
             //set("UsePasswordManager", true); // Version 13
             //set("UseSecretsManager", true); // Version 13
-            //set("SmSeats", short.MaxValue); // Version 13
-            //set("SmServiceAccounts", short.MaxValue); // Version 13
+            //set("SmSeats", (int)short.MaxValue); // Version 13
+            //set("SmServiceAccounts", (int)short.MaxValue); // Version 13
             set("Refresh", DateTime.UtcNow.AddYears(100).AddMonths(-1));
             set("Expires", DateTime.UtcNow.AddYears(100));
             set("Trial", false);
