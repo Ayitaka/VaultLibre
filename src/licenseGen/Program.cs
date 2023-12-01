@@ -362,8 +362,10 @@ namespace bitwardenSelfLicensor
             set("BillingEmail", email);
             set("BusinessName", string.IsNullOrWhiteSpace(businessName) ? "VaultLibre" : businessName);
             set("Enabled", true);
-            set("Plan", "Custom");
-            set("PlanType", Enum.Parse(planTypeEnum, "Custom"));
+//            set("Plan", "Custom");
+//            set("PlanType", Enum.Parse(planTypeEnum, "Custom"));
+            set("Plan", "Enterprise (Annually)");
+            set("PlanType", Enum.Parse(planTypeEnum, "EnterpriseAnnually"));
             set("Seats", int.MaxValue);
             set("MaxCollections", short.MaxValue);
             set("UsePolicies", true);
