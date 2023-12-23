@@ -140,7 +140,7 @@ jobs:
           echo "${API_SHA256}" >> sha256.txt
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3
+        uses: actions/upload-artifact@c7d193f32edcb7bfad88892161225aeda64e9392 # v4
         with:
             name: sha256.txt
             path: sha256.txt
@@ -216,7 +216,7 @@ jobs:
           echo "${LICENSEGEN_SHA256}" >> sha256.txt
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3
+        uses: actions/upload-artifact@c7d193f32edcb7bfad88892161225aeda64e9392 # v4
         with:
             name: sha256.txt
             path: sha256.txt
