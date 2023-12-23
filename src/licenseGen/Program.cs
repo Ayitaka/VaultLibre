@@ -353,7 +353,7 @@ namespace bitwardenSelfLicensor
             }
 
             // From server/blob/master/src/Core/Models/Business/OrganizationLicense.cs
-            set("Version", 12);
+            set("Version", 14);
             set("LicenseType", Enum.Parse(licenseTypeEnum, "Organization"));
             set("LicenseKey", string.IsNullOrWhiteSpace(key) ? Guid.NewGuid().ToString("n") : key);
             set("InstallationId", instalId);
@@ -388,6 +388,8 @@ namespace bitwardenSelfLicensor
             set("UseSecretsManager", true);
             set("SmSeats", int.MaxValue);
             set("SmServiceAccounts", int.MaxValue);
+            set("LimitCollectionCreationDeletion", true);
+            set("AllowAdminAccessToAllCollectionItems", true);
             set("Refresh", DateTime.UtcNow.AddYears(100).AddMonths(-1));
             set("Expires", DateTime.UtcNow.AddYears(100));
             set("Trial", false);
