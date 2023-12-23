@@ -4,8 +4,8 @@
       "coreVersion": "2023.12.0"
     },
     "VaultLibre": {
-      "revision": "0",
-      "fullVersion": "2023.12.0.0",
+      "revision": "1",
+      "fullVersion": "2023.12.0.1",
       "scriptVersion": "1.1.1"
     }
   }
