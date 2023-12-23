@@ -204,7 +204,7 @@ jobs:
           docker push ${DOCKER_HUB}/${DOCKER_HUB_REPO_LICENSEGEN}:${BITWARDEN_CORE_VERSION}
           echo ${DOCKER_HUB}/${DOCKER_HUB_REPO_LICENSEGEN}:${BITWARDEN_CORE_VERSION} Deployed
 
-      - uses: actions/download-artifact@9bc31d5ccc31df68ecc42ccf4149144866c47d8a # v3
+      - uses: actions/download-artifact@f44cd7b40bfd40b6aa1cc1b9b5b7bf03d3c67110 # v4
         with:
           name: sha256.txt
           
@@ -236,7 +236,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
 
-      - uses: actions/download-artifact@9bc31d5ccc31df68ecc42ccf4149144866c47d8a # v3
+      - uses: actions/download-artifact@f44cd7b40bfd40b6aa1cc1b9b5b7bf03d3c67110 # v4
         with:
           name: sha256.txt
 
