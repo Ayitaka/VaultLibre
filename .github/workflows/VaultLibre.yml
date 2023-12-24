@@ -245,6 +245,7 @@ jobs:
           pattern: sha256-*
           merge-multiple: true
 
+      - name: Merge sha256 files
         run: |
           ls -l sha256-files
           cat sha256-files/sha256-identity.txt sha256-files/sha256-api.txt sha256-files/sha256-licensegen.txt > sha256.txt
