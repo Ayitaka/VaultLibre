@@ -136,14 +136,20 @@ jobs:
           IDENTITY_SHA256="$( docker inspect --format='{{index .RepoDigests 0}}' ${DOCKER_HUB}/${DOCKER_HUB_REPO_IDENTITY}:${BITWARDEN_CORE_VERSION} )"
           API_SHA256="$( docker inspect --format='{{index .RepoDigests 0}}' ${DOCKER_HUB}/${DOCKER_HUB_REPO_API}:${BITWARDEN_CORE_VERSION} )"
 
-          echo "${IDENTITY_SHA256}" > sha256.txt
-          echo "${API_SHA256}" >> sha256.txt
+          echo "${IDENTITY_SHA256}" > sha256-identity.txt
+          echo "${API_SHA256}" > sha256-api.txt
 
-      - name: Upload artifacts
+      - name: Upload identity artifact
         uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3
         with:
-            name: sha256.txt
-            path: sha256.txt
+            name: sha256-identity
+            path: sha256-identity.txt
+
+      - name: Upload api artifact
+        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3
+        with:
+            name: sha256-api
+            path: sha256-api.txt
 
 #      - name: Commit changes
 #        uses: EndBug/add-and-commit@v4
@@ -204,22 +210,18 @@ jobs:
           docker push ${DOCKER_HUB}/${DOCKER_HUB_REPO_LICENSEGEN}:${BITWARDEN_CORE_VERSION}
           echo ${DOCKER_HUB}/${DOCKER_HUB_REPO_LICENSEGEN}:${BITWARDEN_CORE_VERSION} Deployed
 
-      - uses: actions/download-artifact@9bc31d5ccc31df68ecc42ccf4149144866c47d8a # v3
-        with:
-          name: sha256.txt
-          
       - name: Get Sha256
         id: get_sha256
         run: |
           LICENSEGEN_SHA256="$( docker inspect --format='{{index .RepoDigests 0}}' ${DOCKER_HUB}/${DOCKER_HUB_REPO_LICENSEGEN}:${BITWARDEN_CORE_VERSION} )"
 
-          echo "${LICENSEGEN_SHA256}" >> sha256.txt
+          echo "${LICENSEGEN_SHA256}" > sha256-licensegen.txt
 
-      - name: Upload artifacts
+      - name: Upload licensegen artifacts
         uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3
         with:
-            name: sha256.txt
-            path: sha256.txt
+            name: sha256-licensegen
+            path: sha256-licensegen.txt
 
   release:
     name: Create Release
@@ -236,9 +238,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
 
-      - uses: actions/download-artifact@9bc31d5ccc31df68ecc42ccf4149144866c47d8a # v3
+      - name: Download all sha256 artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: sha256-files
+          pattern: sha256-*
+          merge-multiple: true
+
+        run: |
+          ls -l sha256-files
+          cat sha256-files/sha256-identity.txt sha256-files/sha256-api.txt sha256-files/sha256-licensegen.txt > sha256.txt
+
+      - name: Upload sha256.txt
+        uses: actions/upload-artifact@v4
         with:
           name: sha256.txt
+          path: sha256.txt
 
       - name: Create Release
         uses: ncipollo/release-action@6c75be85e571768fa31b40abf38de58ba0397db5 # v1
