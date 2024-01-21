@@ -140,13 +140,13 @@ jobs:
           echo "${API_SHA256}" > sha256-api.txt
 
       - name: Upload identity artifact
-        uses: actions/upload-artifact@1eb3cb2b3e0f29609092a73eb033bb759a334595 # v4
+        uses: actions/upload-artifact@694cdabd8bdb0f10b2cea11669e1bf5453eed0a6 # v4
         with:
             name: sha256-identity
             path: sha256-identity.txt
 
       - name: Upload api artifact
-        uses: actions/upload-artifact@1eb3cb2b3e0f29609092a73eb033bb759a334595 # v4
+        uses: actions/upload-artifact@694cdabd8bdb0f10b2cea11669e1bf5453eed0a6 # v4
         with:
             name: sha256-api
             path: sha256-api.txt
@@ -218,7 +218,7 @@ jobs:
           echo "${LICENSEGEN_SHA256}" > sha256-licensegen.txt
 
       - name: Upload licensegen artifacts
-        uses: actions/upload-artifact@1eb3cb2b3e0f29609092a73eb033bb759a334595 # v4
+        uses: actions/upload-artifact@694cdabd8bdb0f10b2cea11669e1bf5453eed0a6 # v4
         with:
             name: sha256-licensegen
             path: sha256-licensegen.txt
@@ -251,7 +251,7 @@ jobs:
           cat sha256-files/sha256-identity.txt sha256-files/sha256-api.txt sha256-files/sha256-licensegen.txt > sha256.txt
 
       - name: Upload sha256.txt
-        uses: actions/upload-artifact@1eb3cb2b3e0f29609092a73eb033bb759a334595 # v4
+        uses: actions/upload-artifact@694cdabd8bdb0f10b2cea11669e1bf5453eed0a6 # v4
         with:
           name: sha256.txt
           path: sha256.txt
