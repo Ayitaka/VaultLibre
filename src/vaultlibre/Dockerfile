@@ -1,6 +1,6 @@
 ARG BITWARDEN_TAG
 
-FROM mcr.microsoft.com/dotnet/sdk as build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 as build
 
 WORKDIR /vaultlibre
 
@@ -13,7 +13,7 @@ RUN set -e; set -x; \
 
 FROM ${BITWARDEN_TAG}
 
-COPY --from=build /vaultlibre/bin/Debug/netcoreapp6.0/publish/* /vaultlibre/
+COPY --from=build /vaultlibre/bin/Release/netcoreapp8.0/publish/* /vaultlibre/
 COPY ./src/vaultlibre/vaultlibre-entrypoint.sh /
 RUN chmod +x /vaultlibre-entrypoint.sh
 
