@@ -13,7 +13,7 @@ RUN set -e; set -x; \
 
 FROM ${BITWARDEN_TAG}
 
-COPY --from=build /vaultlibre/bin/Release/netcoreapp8.0/publish/* /vaultlibre/
+COPY --from=build /vaultlibre/bin/Release/net8.0/publish/* /vaultlibre/
 COPY ./src/vaultlibre/vaultlibre-entrypoint.sh /
 RUN chmod +x /vaultlibre-entrypoint.sh
 
