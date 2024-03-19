@@ -113,10 +113,10 @@ jobs:
 
           if [ ${VAULTLIBRE_CORE_VERSION} == ${BITWARDEN_CORE_VERSION} ]; then
             VAULTLIBRE_REVISION=$(( ${VAULTLIBRE_REVISION} + 1 ))
-            MESSAGE="VaultLibre Revision Update"
+            MESSAGE="VaultLibre Revision Update To ${VAULTLIBRE_REVISION}"
           else
             VAULTLIBRE_REVISION=0
-            MESSAGE="Bitwarden Core Version Update"
+            MESSAGE="Bitwarden Core Version Update To ${BITWARDEN_CORE_VERSION}"
           fi
 
           echo "MESSAGE=${MESSAGE}" >> $GITHUB_ENV
