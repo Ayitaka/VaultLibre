@@ -113,7 +113,7 @@ jobs:
 
           if [ ${VAULTLIBRE_CORE_VERSION} == ${BITWARDEN_CORE_VERSION} ]; then
             VAULTLIBRE_REVISION=$(( ${VAULTLIBRE_REVISION} + 1 ))
-            MESSAGE="VaultLibre Revision Update To ${VAULTLIBRE_REVISION}"
+            MESSAGE="VaultLibre Revision Update To ${BITWARDEN_CORE_VERSION}\.${VAULTLIBRE_REVISION}"
           else
             VAULTLIBRE_REVISION=0
             MESSAGE="Bitwarden Core Version Update To ${BITWARDEN_CORE_VERSION}"
