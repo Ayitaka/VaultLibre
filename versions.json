@@ -1,11 +1,11 @@
 {
   "versions": {
     "Bitwarden": {
-      "coreVersion": "2024.2.3"
+      "coreVersion": "2024.3.0"
     },
     "VaultLibre": {
-      "revision": "3",
-      "fullVersion": "2024.2.3.3",
+      "revision": "0",
+      "fullVersion": "2024.3.0.0",
       "scriptVersion": "1.1.1"
     }
   }
