@@ -353,7 +353,7 @@ namespace bitwardenSelfLicensor
             }
 
             // From server/blob/master/src/Core/Models/Business/OrganizationLicense.cs
-            set("Version", 14);
+            set("Version", 15);
             set("LicenseType", Enum.Parse(licenseTypeEnum, "Organization"));
             set("LicenseKey", string.IsNullOrWhiteSpace(key) ? Guid.NewGuid().ToString("n") : key);
             set("InstallationId", instalId);
@@ -362,8 +362,6 @@ namespace bitwardenSelfLicensor
             set("BillingEmail", email);
             set("BusinessName", string.IsNullOrWhiteSpace(businessName) ? "VaultLibre" : businessName);
             set("Enabled", true);
-//            set("Plan", "Custom");
-//            set("PlanType", Enum.Parse(planTypeEnum, "Custom"));
             set("Plan", "Enterprise (Annually)");
             set("PlanType", Enum.Parse(planTypeEnum, "EnterpriseAnnually"));
             set("Seats", int.MaxValue);
