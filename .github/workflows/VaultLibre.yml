@@ -69,8 +69,8 @@ jobs:
 
       - name: Build VaultLibre Images
         run: |
-          docker build -f ./src/vaultlibre/Dockerfile --build-arg BITWARDEN_TAG=bitwarden/api:${BITWARDEN_CORE_VERSION} --label com.bitwarden.product="vaultlibre" -t ${DOCKER_HUB}/${DOCKER_HUB_REPO_API} .
-          docker build -f ./src/vaultlibre/Dockerfile --build-arg BITWARDEN_TAG=bitwarden/identity:${BITWARDEN_CORE_VERSION} --label com.bitwarden.product="vaultlibre" -t ${DOCKER_HUB}/${DOCKER_HUB_REPO_IDENTITY} .
+          docker build -f ./src/vaultlibre/Dockerfile --build-arg BITWARDEN_TAG=ghcr.io/bitwarden/api:${BITWARDEN_CORE_VERSION} --label com.bitwarden.product="vaultlibre" -t ${DOCKER_HUB}/${DOCKER_HUB_REPO_API} .
+          docker build -f ./src/vaultlibre/Dockerfile --build-arg BITWARDEN_TAG=ghcr.io/bitwarden/identity:${BITWARDEN_CORE_VERSION} --label com.bitwarden.product="vaultlibre" -t ${DOCKER_HUB}/${DOCKER_HUB_REPO_IDENTITY} .
 
       - name: Login
         run: |
