@@ -16,8 +16,8 @@ cp "$DIR/.keys/cert.cert" "$DIR/src/vaultlibre/.keys"
 
 docker run --rm -v "$DIR/src/vaultlibre:/vaultlibre" -w=/vaultlibre mcr.microsoft.com/dotnet/sdk:8.0 sh build.sh
 
-docker build --no-cache --build-arg BITWARDEN_TAG=bitwarden/api:$BW_VERSION --label com.bitwarden.product="vaultlibre" -t vaultlibre/api "$DIR/src/vaultlibre" # --squash
-docker build --no-cache --build-arg BITWARDEN_TAG=bitwarden/identity:$BW_VERSION --label com.bitwarden.product="vaultlibre" -t vaultlibre/identity "$DIR/src/vaultlibre" # --squash
+docker build --no-cache --build-arg BITWARDEN_TAG=ghcr.io/bitwarden/api:$BW_VERSION --label com.bitwarden.product="vaultlibre" -t vaultlibre/api "$DIR/src/vaultlibre" # --squash
+docker build --no-cache --build-arg BITWARDEN_TAG=ghcr.io/bitwarden/identity:$BW_VERSION --label com.bitwarden.product="vaultlibre" -t vaultlibre/identity "$DIR/src/vaultlibre" # --squash
 
 docker tag vaultlibre/api vaultlibre/api:latest
 docker tag vaultlibre/identity vaultlibre/identity:latest
