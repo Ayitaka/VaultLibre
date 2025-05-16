@@ -389,8 +389,8 @@ namespace bitwardenSelfLicensor
             set("UseRiskInsights", true);
             set("LimitCollectionCreationDeletion", true);
             set("AllowAdminAccessToAllCollectionItems", true);
-            set("UseOrganizationDomains", true);
-            set("UseAdminSponsoredFamilies", true);
+/*            set("UseOrganizationDomains", true); */
+/*            set("UseAdminSponsoredFamilies", true); */
             set("Refresh", DateTime.UtcNow.AddYears(100).AddMonths(-1));
             set("Expires", DateTime.UtcNow.AddYears(100));
             set("Trial", false);
