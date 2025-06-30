@@ -257,7 +257,7 @@ jobs:
           path: sha256.txt
 
       - name: Create Release
-        uses: ncipollo/release-action@cdcc88a9acf3ca41c16c37bb7d21b9ad48560d87 # v1
+        uses: ncipollo/release-action@bcfe5470707e8832e12347755757cec0eb3c22af # v1
         with:
           #commit: ${{ github.sha }}
           commit: ${{ needs.build_vaultlibre.outputs.commit_hash }}
